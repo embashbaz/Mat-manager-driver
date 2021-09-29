@@ -16,6 +16,8 @@ object Constant {
     val NOTIFICATION_CHANNEL_NAME = "Tracking"
     val NOTIFICATION_ID = 1
 
+    val SHOW_TRACKING_FRAGMENT = "SHOW_TRACKING_FRAGMENT"
+
 
 
 
