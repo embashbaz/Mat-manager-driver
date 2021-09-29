@@ -12,5 +12,11 @@ object Constant {
     val ACTION_PAUSE_SERVICE = "ACTION_PAUSE_SERVICE"
     val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
 
+    val NOTIFICATION_CHANNEL_ID = "tracking_channel"
+    val NOTIFICATION_CHANNEL_NAME = "Tracking"
+    val NOTIFICATION_ID = 1
+
+
+
 
 }
