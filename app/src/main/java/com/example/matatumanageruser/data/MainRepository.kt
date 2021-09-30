@@ -1,6 +1,7 @@
 package com.example.matatumanageruser.data
 
-import com.example.matatumanageradmin.utils.OperationStatus
+import com.example.matatumanageruser.utils.OperationStatus
+
 
 interface MainRepository {
 
