@@ -44,9 +44,6 @@ class KtorRepository  @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateExpense(expense: Expense): OperationStatus<String> {
-        TODO("Not yet implemented")
-    }
 
     override suspend fun updateBus(bus: Bus): OperationStatus<String> {
         TODO("Not yet implemented")
