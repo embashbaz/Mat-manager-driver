@@ -1,5 +1,6 @@
 package com.example.util
 
+const val BASE_URL =""
 
 const val API_VERSION = "/v1"
 const val MAT_ADMIN = "$API_VERSION/mat_admin"
