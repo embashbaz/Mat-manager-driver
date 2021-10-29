@@ -14,7 +14,7 @@ data class MatAdmin(
     var licenseLink: String = "",
     var status: String = "",
     var comment: String = "",
-    var dateCreated: String = "",
+    var dateCreated: String = ""
 
     )
 
