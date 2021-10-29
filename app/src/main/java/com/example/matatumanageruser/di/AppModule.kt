@@ -1,7 +1,6 @@
 package com.example.matatumanageradmin.di
 
 
-import com.example.matatumanageruser.data.FirebaseRepository
 import com.example.matatumanageruser.data.KtorRepository
 import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.data.MatManagerApi
@@ -35,7 +34,6 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(MatManagerApi::class.java)
-
 
 
     @Singleton
