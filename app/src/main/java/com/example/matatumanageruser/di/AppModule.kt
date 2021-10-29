@@ -1,6 +1,7 @@
 package com.example.matatumanageradmin.di
 
 
+import com.example.matatumanageruser.data.FirebaseRepository
 import com.example.matatumanageruser.data.MainRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
