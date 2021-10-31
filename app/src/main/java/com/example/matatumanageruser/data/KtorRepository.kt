@@ -2,6 +2,7 @@ package com.example.matatumanageruser.data
 
 import com.example.matatumanageruser.utils.OperationStatus
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class KtorRepository  @Inject constructor(
@@ -9,7 +10,24 @@ class KtorRepository  @Inject constructor(
     private  val api: MatManagerApi
 ): MainRepository{
     override suspend fun login(email: String, password: String): OperationStatus<Driver> {
-        TODO("Not yet implemented")
+        return try {
+
+            var uId = mAuth.signInWithEmailAndPassword(email, password).await().user!!.uid
+            if (!!uId.isNullOrEmpty()){
+                val response = api.getDrivers("", uId)
+                val result = response.body()
+                if(response.isSuccessful && result != null){
+                    OperationStatus.Success(result)
+                }else{
+                    OperationStatus.Error(response.message())
+                }
+            }else{
+                OperationStatus.Error("Pleas make sure the account exit")
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun getBus(plate: String): OperationStatus<Bus> {
