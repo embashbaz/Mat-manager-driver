@@ -31,11 +31,33 @@ class KtorRepository  @Inject constructor(
     }
 
     override suspend fun getBus(plate: String): OperationStatus<Bus> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.getBus("", plate)
+            val result = response.body()
+            if(response.isSuccessful && result != null){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun getAdmin(adminId: String): OperationStatus<MatAdmin> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.getAdmin(adminId)
+            val result = response.body()
+            if(response.isSuccessful && result != null){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun addTrip(trip: Trip): OperationStatus<String> {
