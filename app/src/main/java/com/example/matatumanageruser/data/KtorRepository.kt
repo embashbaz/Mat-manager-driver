@@ -107,14 +107,37 @@ class KtorRepository  @Inject constructor(
 
     override suspend fun updateDriver(driver: Driver): OperationStatus<String> {
         TODO("Not yet implemented")
+
     }
 
     override suspend fun updateTrip(trip: Trip): OperationStatus<String> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.updateTrip(trip)
+            val result = response.body()
+            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun updateStat(statistics: Statistics): OperationStatus<String> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.updateStat(statistics)
+            val result = response.body()
+            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
 
