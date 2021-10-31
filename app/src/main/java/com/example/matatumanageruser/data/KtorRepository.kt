@@ -61,11 +61,33 @@ class KtorRepository  @Inject constructor(
     }
 
     override suspend fun addTrip(trip: Trip): OperationStatus<String> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.createTrip(trip)
+            val result = response.body()
+            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun addStat(statistics: Statistics): OperationStatus<String> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.createStat(statistics)
+            val result = response.body()
+            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun addExpense(expense: Expense): OperationStatus<String> {
