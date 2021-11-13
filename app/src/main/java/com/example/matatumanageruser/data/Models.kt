@@ -24,6 +24,7 @@ data class Driver(
     var managerId: String = "",
     var cardId : String = "",
     var permitNumber: String = "",
+    var pictureLink : String = "",
     var permitLink: String = "",
     var name: String = "",
     var email: String = "",
