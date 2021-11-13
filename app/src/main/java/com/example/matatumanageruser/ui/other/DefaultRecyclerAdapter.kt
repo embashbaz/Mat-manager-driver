@@ -3,8 +3,6 @@ package com.example.matatumanageruser.ui.other
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.example.matatumanageruser.data.Expense
 import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.data.Statistics
