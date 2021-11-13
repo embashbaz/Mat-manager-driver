@@ -5,7 +5,9 @@
       <map>
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_expense_list.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_issue.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_trip_list.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/general_recycler_item.xml" value="0.240625" />
       </map>
