@@ -70,7 +70,12 @@ data class Statistics(
     var busPlate: String = "",
     var driverId: String = "",
     var pathPoints: String = "",
+    var locationLat: Double = 0.0,
+    var locationLng: Double = 0.0,
     var timeStarted: String = "",
+    var distance: Double = 0.0,
+    var amount: Double = 0.0,
+    var expense: Double = 0.0,
     var timeEnded: String = "",
     var maxSpeed: Double = 0.0,
     var comment: String = ""
@@ -85,4 +90,16 @@ data class Expense(
     var amount: Double = 0.0,
     var reason: String = "",
     var comment: String = ""
+)
+
+@Serializable
+data class Issue(
+    var issueId: String = "",
+    var date: String = "",
+    var status: String = "",
+    var busPlate: String = "",
+    var driverId: String = "",
+    var reason: String = "",
+    var comment: String = ""
+
 )
