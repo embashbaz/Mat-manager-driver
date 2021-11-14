@@ -8,13 +8,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.matatumanageruser.R
+import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.data.Trip
 import com.example.matatumanageruser.databinding.FragmentTripListBinding
 import com.example.matatumanageruser.ui.expenses.ExpenseListViewModel
+import com.example.matatumanageruser.ui.issueDetail.IssueDetailDialog
 import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
 
 
-class TripListFragment : Fragment() {
+class TripListFragment : Fragment(){
 
     private lateinit var tripListBinding: FragmentTripListBinding
     private val tripListViewModel : TripListViewModel by viewModels()
@@ -50,6 +52,7 @@ class TripListFragment : Fragment() {
     private fun onTripClicked(trip: Any) {
         if (trip is Trip){
             tripListViewModel.setTripObject(trip)
+
         }
     }
 
@@ -57,5 +60,8 @@ class TripListFragment : Fragment() {
         tripListBinding.tripListRecyclerView.layoutManager = LinearLayoutManager(activity)
         tripListBinding.tripListRecyclerView.adapter = defaultRecyclerAdapter
     }
+
+
+
 
 }

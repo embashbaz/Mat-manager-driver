@@ -29,8 +29,12 @@ class IssuesViewModel  @Inject constructor(val repository: MainRepository,
     val issueObject: LiveData<Issue>
         get() = _issueObject
 
-    fun setNextActionNewIssue(){
-        _newIssueAction.value = true
+    private var _addIssueResult = MutableLiveData<IssueStatus>( IssueStatus.Empty)
+    val addIssueResult: LiveData<IssueStatus>
+        get() = _addIssueResult
+
+    fun setNextActionNewIssue(bool: Boolean){
+        _newIssueAction.value = bool
     }
 
     fun setClickedIssueObject(issue: Issue){
@@ -54,6 +58,20 @@ class IssuesViewModel  @Inject constructor(val repository: MainRepository,
 
         }
 
+    }
+
+    fun createNewIssue(issue: Issue){
+        if (issue.reason.isNotEmpty() && issue.driverId.isNotEmpty()){
+            viewModelScope.launch(dispatcher.io) {
+                _addIssueResult.value = IssueStatus.Loading
+                when(val response = repository.addIssue(issue)){
+                    is OperationStatus.Error -> _addIssueResult.value = IssueStatus.Failed(response.message!!)
+                    is OperationStatus.Success -> _addIssueResult.value= IssueStatus.Success(response.message!!, emptyList())
+                }
+
+
+            }
+        }
     }
 
 

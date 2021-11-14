@@ -16,6 +16,7 @@
         <entry key="app/src/main/res/layout/general_recycler_item.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/issue_dialog.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/start_day_dialog.xml" value="0.240625" />
+        <entry key="app/src/main/res/menu/issue_list_menu.xml" value="0.1287037037037037" />
       </map>
     </option>
   </component>
