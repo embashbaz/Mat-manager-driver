@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.matatumanageruser.data.Expense
+import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.data.MainRepository
+import com.example.matatumanageruser.ui.issues.IssuesViewModel
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
 import kotlinx.coroutines.launch
@@ -28,8 +30,12 @@ class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
     val expenseObject: LiveData<Expense>
         get() = _expenseObject
 
-    fun setNextActionNewExpense(){
-        _newExpenseAction.value = true
+    private var _addExpenseResult = MutableLiveData<ExpenseStatus>(ExpenseStatus.Empty)
+    val addExpenseResult: LiveData<ExpenseStatus>
+        get() = _addExpenseResult
+
+    fun setNextActionNewExpense(bool: Boolean){
+        _newExpenseAction.value = bool
     }
 
     fun setClickedExpenseObject(expense: Expense){
@@ -49,6 +55,20 @@ class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
                     }
 
                 }
+            }
+        }
+    }
+
+    fun createNewExpense(expense: Expense){
+        if (expense.reason.isNotEmpty() && expense.amount > 0.0 ){
+            viewModelScope.launch(dispatcher.io) {
+                _addExpenseResult.value = ExpenseStatus.Loading
+                when(val response = repository.addExpense(expense)){
+                    is OperationStatus.Error -> _addExpenseResult.value = ExpenseStatus.Failed(response.message!!)
+                    is OperationStatus.Success -> _addExpenseResult.value= ExpenseStatus.Success(response.message!!, emptyList())
+                }
+
+
             }
         }
     }
