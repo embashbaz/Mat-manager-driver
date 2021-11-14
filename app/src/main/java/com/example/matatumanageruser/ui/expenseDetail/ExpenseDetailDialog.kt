@@ -6,9 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.DialogFragment
 import com.example.matatumanageruser.data.Expense
-import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.databinding.ExpenseDialogBinding
-import com.example.matatumanageruser.ui.issueDetail.IssueDetailDialog
 import com.example.matatumanageruser.ui.other.stringFromTl
 
 class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFragment(){

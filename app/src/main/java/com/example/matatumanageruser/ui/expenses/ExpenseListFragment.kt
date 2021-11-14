@@ -59,9 +59,9 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
     private fun onExpenseClicked(expense: Any) {
         if(expense is Expense){
             expenseListViewModel.setClickedExpenseObject(expense)
-            expenseListViewModel.addExpenseResult.observe(viewLifecycleOwner, {
+            expenseListViewModel.expenseObject.observe(viewLifecycleOwner, {
                 if (it != null){
-                    openExpenseDetailDialog(true, expense)
+                    openExpenseDetailDialog(true, it)
                     expenseListViewModel.setNextActionNewExpense(false)
                 }
             })
