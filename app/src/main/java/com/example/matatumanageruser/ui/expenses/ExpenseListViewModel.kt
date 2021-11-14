@@ -50,7 +50,6 @@ class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
 
                 }
             }
-
         }
     }
 
