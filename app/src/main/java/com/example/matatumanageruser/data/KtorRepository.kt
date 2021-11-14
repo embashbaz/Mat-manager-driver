@@ -105,6 +105,10 @@ class KtorRepository  @Inject constructor(
         }
     }
 
+    override suspend fun addIssue(issue: Issue): OperationStatus<String> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun updateDriver(driver: Driver): OperationStatus<String> {
         TODO("Not yet implemented")
 
@@ -142,6 +146,10 @@ class KtorRepository  @Inject constructor(
 
 
     override suspend fun updateBus(bus: Bus): OperationStatus<String> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun updateIssue(issue: Issue): OperationStatus<String> {
         TODO("Not yet implemented")
     }
 
@@ -205,4 +213,12 @@ class KtorRepository  @Inject constructor(
         }
     }
 
+    override suspend fun getIssues(
+        type: String,
+        id: String,
+        startDate: String,
+        endDate: String
+    ): OperationStatus<List<Issue>> {
+        TODO("Not yet implemented")
+    }
 }
