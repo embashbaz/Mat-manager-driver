@@ -18,6 +18,10 @@ interface MatManagerApi {
     @POST(CREATE_STATS)
     suspend fun createStat(@Body statistics: Statistics): Response<String>
 
+    @POST(CREATE_ISSUES)
+    suspend fun createIssue(@Body issue: Issue): Response<String>
+
+
 
     @POST(UPDATE_BUSES)
     suspend fun updateBus(@Body bus: Bus): Response<String>
@@ -73,5 +77,13 @@ interface MatManagerApi {
         @Query("startDate") startDate: String,
         @Query("endDate") endDate: String
     ): Response<List<Expense>>
+
+    @GET(ISSUES)
+    suspend fun getIssues(
+        @Query("type") type: String,
+        @Query("id") id: String,
+        @Query("startDate") startDate: String,
+        @Query("endDate") endDate: String
+    ): Response<List<Issue>>
 
 }

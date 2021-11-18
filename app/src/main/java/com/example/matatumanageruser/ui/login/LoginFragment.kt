@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentLoginBinding
 import com.example.matatumanageruser.ui.other.stringFromTl
@@ -46,9 +47,13 @@ class LoginFragment : Fragment() {
 
                 }
                 is LoginViewModel.LoginStatus.Success -> {
-
+                    moveToDashboard()
                 }
             }
         })
+    }
+
+    fun moveToDashboard(){
+        this.findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
     }
 }

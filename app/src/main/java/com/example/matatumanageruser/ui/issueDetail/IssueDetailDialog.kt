@@ -9,6 +9,7 @@ import androidx.fragment.app.DialogFragment
 import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.databinding.IssueDialogBinding
 import com.example.matatumanageruser.ui.issues.IssueFragment
+import com.example.matatumanageruser.ui.other.getDate
 
 class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment(){
 
@@ -62,7 +63,7 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
     }
 
     private fun createIssue() {
-        issue = Issue("","", "Created", "", "",issueDetailBinding.issueTypeSpinner.selectedItem.toString(), issueDetailBinding.commentIssueDialog.editText!!.text.toString())
+        issue = Issue(getDate(),"", "Created", "Az455", "AzQBcMHYq1aZ5YzstecUxPuiHKz1",issueDetailBinding.issueTypeSpinner.selectedItem.toString(), issueDetailBinding.commentIssueDialog.editText!!.text.toString())
     }
 
     interface IssueDetailDialogListener{

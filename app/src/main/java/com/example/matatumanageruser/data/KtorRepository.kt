@@ -1,5 +1,6 @@
 package com.example.matatumanageruser.data
 
+import com.example.matatumanageruser.utils.Constant
 import com.example.matatumanageruser.utils.OperationStatus
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
@@ -106,7 +107,18 @@ class KtorRepository  @Inject constructor(
     }
 
     override suspend fun addIssue(issue: Issue): OperationStatus<String> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.createIssue(issue)
+            val result = response.body()
+            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun updateDriver(driver: Driver): OperationStatus<String> {
@@ -200,7 +212,7 @@ class KtorRepository  @Inject constructor(
         endDate: String
     ): OperationStatus<List<Expense>> {
         return  try{
-            val response = api.getExpenses("", id, startDate, endDate)
+            val response = api.getExpenses(Constant.DRIVER_EXPENSE, id, startDate, endDate)
             val result = response.body()
             if(response.isSuccessful && !result!!.isEmpty()!!){
                 OperationStatus.Success(result)
@@ -219,6 +231,17 @@ class KtorRepository  @Inject constructor(
         startDate: String,
         endDate: String
     ): OperationStatus<List<Issue>> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.getIssues(Constant.DRIVER_EXPENSE, id, startDate, endDate)
+            val result = response.body()
+            if(response.isSuccessful && !result!!.isEmpty()!!){
+                OperationStatus.Success(result)
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 }

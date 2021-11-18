@@ -3,8 +3,6 @@ package com.example.matatumanageruser.ui.dashboard
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.matatumanageradmin.data.MainRepository
-import com.example.matatumanageradmin.utils.DispatcherProvider
 import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.utils.DispatcherProvider
 import dagger.hilt.android.lifecycle.HiltViewModel

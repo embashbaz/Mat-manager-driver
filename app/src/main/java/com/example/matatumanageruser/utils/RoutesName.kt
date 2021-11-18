@@ -16,4 +16,8 @@ const val UPDATE_BUSES = "$BUSES/update"
 const val UPDATE_TRIPS = "$TRIPS/update"
 const val UPDATE_STATS = "$STATS/update"
 
+const val ISSUES = "$API_VERSION/issue"
+const val CREATE_ISSUES = "$ISSUES/create"
+const val UPDATE_ISSUES = "$ISSUES/update"
+
 

@@ -7,6 +7,7 @@ import android.view.View
 import androidx.fragment.app.DialogFragment
 import com.example.matatumanageruser.data.Expense
 import com.example.matatumanageruser.databinding.ExpenseDialogBinding
+import com.example.matatumanageruser.ui.other.getDate
 import com.example.matatumanageruser.ui.other.stringFromTl
 
 class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFragment(){
@@ -36,8 +37,9 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
     }
 
     private fun createExpense() {
-        expense = Expense("", "", stringFromTl(expenseDetailBiding.plateExpenseDialog),
-                        "", stringFromTl( expenseDetailBiding.amountExpenseDialog).toDouble(),
+        expense = Expense(
+            getDate(), "", stringFromTl(expenseDetailBiding.plateExpenseDialog),
+                        "AzQBcMHYq1aZ5YzstecUxPuiHKz1", stringFromTl( expenseDetailBiding.amountExpenseDialog).toDouble(),
                         stringFromTl(expenseDetailBiding.reasonExpenseDialog),
                         stringFromTl(expenseDetailBiding.commentExpenseDialog))
     }
