@@ -11,8 +11,9 @@ import com.example.matatumanageruser.databinding.FragmentExpenseListBinding
 import com.example.matatumanageruser.ui.expenseDetail.ExpenseDetailDialog
 import com.example.matatumanageruser.ui.issues.IssuesViewModel
 import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogListener {
 
     private lateinit var expenseListBinding: FragmentExpenseListBinding

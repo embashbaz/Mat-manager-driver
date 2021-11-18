@@ -1,6 +1,8 @@
 package com.example.util
 
-const val BASE_URL =""
+import com.example.matatumanageruser.utils.web
+
+const val BASE_URL = web
 
 const val API_VERSION = "/v1"
 const val MAT_ADMIN = "$API_VERSION/mat_admin"

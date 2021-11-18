@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.stat.StatisticsFragment">
 
-    <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/chart1"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner_parameter_type"
-        tools:ignore="MissingClass" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/statistics_recycler_view"
@@ -26,7 +18,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart1"
         tools:listitem="@layout/general_recycler_item" />
 
     <TextView

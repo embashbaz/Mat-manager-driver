@@ -10,8 +10,9 @@ import androidx.navigation.fragment.findNavController
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentLoginBinding
 import com.example.matatumanageruser.ui.other.stringFromTl
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class LoginFragment : Fragment() {
 
     private lateinit var loginBinding: FragmentLoginBinding

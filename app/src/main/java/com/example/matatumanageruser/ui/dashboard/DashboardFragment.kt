@@ -9,8 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardBinding: FragmentDashboardBinding

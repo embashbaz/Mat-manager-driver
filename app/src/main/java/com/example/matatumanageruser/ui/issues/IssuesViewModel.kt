@@ -44,7 +44,7 @@ class IssuesViewModel  @Inject constructor(val repository: MainRepository,
     fun getIssues(id: String){
         viewModelScope.launch(dispatcher.io){
             _issueList.value = IssueStatus.Loading
-            when(val response = repository.getIssues("",id,"","")){
+            when(val response = repository.getIssues("",id,"a","a")){
                 is OperationStatus.Error -> _issueList.value = IssueStatus.Failed(response.message!!)
                 is OperationStatus.Success -> {
                     if (response.data!!.isEmpty()){

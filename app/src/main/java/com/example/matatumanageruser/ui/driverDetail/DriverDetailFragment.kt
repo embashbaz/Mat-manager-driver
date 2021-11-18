@@ -11,8 +11,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.data.Driver
 import com.example.matatumanageruser.databinding.FragmentDriverDetailBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class DriverDetailFragment : Fragment() {
 
     private lateinit var driverDetailBinding: FragmentDriverDetailBinding

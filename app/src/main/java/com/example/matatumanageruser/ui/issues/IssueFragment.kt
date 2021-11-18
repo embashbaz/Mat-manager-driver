@@ -10,8 +10,9 @@ import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.databinding.FragmentIssueBinding
 import com.example.matatumanageruser.ui.issueDetail.IssueDetailDialog
 import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
 
     private lateinit var issueBinding: FragmentIssueBinding
