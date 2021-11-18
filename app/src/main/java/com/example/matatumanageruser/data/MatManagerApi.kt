@@ -1,6 +1,7 @@
 package com.example.matatumanageruser.data
 
 import com.example.util.*
+import com.google.gson.JsonObject
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -10,16 +11,16 @@ import retrofit2.http.Query
 interface MatManagerApi {
 
     @POST(CREATE_TRIPS)
-    suspend fun createTrip(@Body trip: Trip): Response<String>
+    suspend fun createTrip(@Body trip: Trip): Response<JsonObject>
 
     @POST(CREATE_EXPENSES)
-    suspend fun createExpense(@Body expense: Expense): Response<String>
+    suspend fun createExpense(@Body expense: Expense): Response<JsonObject>
 
     @POST(CREATE_STATS)
-    suspend fun createStat(@Body statistics: Statistics): Response<String>
+    suspend fun createStat(@Body statistics: Statistics): Response<JsonObject>
 
     @POST(CREATE_ISSUES)
-    suspend fun createIssue(@Body issue: Issue): Response<String>
+    suspend fun createIssue(@Body issue: Issue): Response<JsonObject>
 
 
 

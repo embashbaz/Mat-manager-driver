@@ -65,8 +65,8 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createTrip(trip)
             val result = response.body()
-            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
-                OperationStatus.Success(result)
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
             }
@@ -80,8 +80,8 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createStat(statistics)
             val result = response.body()
-            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
-                OperationStatus.Success(result)
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
             }
@@ -95,8 +95,8 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createExpense(expense)
             val result = response.body()
-            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
-                OperationStatus.Success(result)
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
             }
@@ -110,8 +110,8 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createIssue(issue)
             val result = response.body()
-            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
-                OperationStatus.Success(result)
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
             }
