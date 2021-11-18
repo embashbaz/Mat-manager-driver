@@ -26,6 +26,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         expenseListBinding = FragmentExpenseListBinding.inflate(inflater,container, false)
         val view = expenseListBinding.root
@@ -39,7 +40,10 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
 
     private fun newExpense() {
         expenseListViewModel.newExpenseAction.observe(viewLifecycleOwner, {
-            openExpenseDetailDialog(false, null)
+            if(it) {
+                openExpenseDetailDialog(false, null)
+                expenseListViewModel.setNextActionNewExpense(false)
+            }
 
         })
     }

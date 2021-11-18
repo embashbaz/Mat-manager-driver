@@ -24,6 +24,7 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         // Inflate the layout for this fragment
         issueBinding = FragmentIssueBinding.inflate(inflater, container, false)
         val view = issueBinding.root

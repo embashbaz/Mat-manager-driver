@@ -63,8 +63,19 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
     }
 
     private fun createIssue() {
-        issue = Issue(getDate(),"", "Created", "Az455", "AzQBcMHYq1aZ5YzstecUxPuiHKz1",issueDetailBinding.issueTypeSpinner.selectedItem.toString(), issueDetailBinding.commentIssueDialog.editText!!.text.toString())
-    }
+        issueDetailBinding.saveIssueBt.setOnClickListener {
+            issue = Issue(
+                getDate(),
+                "",
+                "Created",
+                "Az455",
+                "AzQBcMHYq1aZ5YzstecUxPuiHKz1",
+                issueDetailBinding.issueTypeSpinner.selectedItem.toString(),
+                issueDetailBinding.commentIssueDialog.editText!!.text.toString()
+            )
+
+        }
+        }
 
     interface IssueDetailDialogListener{
         fun onSaveButtonClicked(issue: Issue)

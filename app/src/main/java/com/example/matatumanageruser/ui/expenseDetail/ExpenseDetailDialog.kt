@@ -37,11 +37,17 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
     }
 
     private fun createExpense() {
-        expense = Expense(
-            getDate(), "", stringFromTl(expenseDetailBiding.plateExpenseDialog),
-                        "AzQBcMHYq1aZ5YzstecUxPuiHKz1", stringFromTl( expenseDetailBiding.amountExpenseDialog).toDouble(),
-                        stringFromTl(expenseDetailBiding.reasonExpenseDialog),
-                        stringFromTl(expenseDetailBiding.commentExpenseDialog))
+        expenseDetailBiding.saveExpenseBt.setOnClickListener {
+            expense = Expense(
+                getDate(),
+                "",
+                stringFromTl(expenseDetailBiding.plateExpenseDialog),
+                "AzQBcMHYq1aZ5YzstecUxPuiHKz1",
+                stringFromTl(expenseDetailBiding.amountExpenseDialog).toDouble(),
+                stringFromTl(expenseDetailBiding.reasonExpenseDialog),
+                stringFromTl(expenseDetailBiding.commentExpenseDialog)
+            )
+        }
     }
 
     private fun populateView() {
