@@ -8,9 +8,10 @@ import com.example.matatumanageruser.data.Driver
 import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
+@HiltViewModel
 class LoginViewModel @Inject constructor(val repository: MainRepository,
                                          private val dispatcher: DispatcherProvider
 ) : ViewModel() {
@@ -23,10 +24,10 @@ class LoginViewModel @Inject constructor(val repository: MainRepository,
     fun loginMethod(email: String, password: String){
         if (email.isNotEmpty() && password.isNotEmpty())
         viewModelScope.launch(dispatcher.io) {
-            _loginStatus.value = LoginStatus.Loading
+            _loginStatus.postValue(LoginStatus.Loading)
             when (val response = repository.login(email, password)){
-                is OperationStatus.Error -> _loginStatus.value = LoginStatus.Failed(response.message!!)
-                is OperationStatus.Success -> _loginStatus.value = LoginStatus.Success("Success", null)
+                is OperationStatus.Error -> _loginStatus.postValue(LoginStatus.Failed(response.message!!))
+                is OperationStatus.Success -> _loginStatus.postValue( LoginStatus.Success("Success", null))
             }
 
         }else{

@@ -10,9 +10,11 @@ import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.ui.expenses.ExpenseListViewModel
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class IssuesViewModel  @Inject constructor(val repository: MainRepository,
                                            private val dispatcher: DispatcherProvider
 ) : ViewModel() {
@@ -43,14 +45,14 @@ class IssuesViewModel  @Inject constructor(val repository: MainRepository,
 
     fun getIssues(id: String){
         viewModelScope.launch(dispatcher.io){
-            _issueList.value = IssueStatus.Loading
+            _issueList.postValue(IssueStatus.Loading)
             when(val response = repository.getIssues("",id,"a","a")){
-                is OperationStatus.Error -> _issueList.value = IssueStatus.Failed(response.message!!)
+                is OperationStatus.Error -> _issueList.postValue(IssueStatus.Failed(response.message!!))
                 is OperationStatus.Success -> {
                     if (response.data!!.isEmpty()){
-                        _issueList.value = IssueStatus.Failed("No data was returned")
+                        _issueList.postValue( IssueStatus.Failed("No data was returned"))
                     }else{
-                        _issueList.value = IssueStatus.Success("success", response.data)
+                        _issueList.postValue( IssueStatus.Success("success", response.data))
                     }
 
                 }
@@ -63,10 +65,10 @@ class IssuesViewModel  @Inject constructor(val repository: MainRepository,
     fun createNewIssue(issue: Issue){
         if (issue.reason.isNotEmpty() && issue.driverId.isNotEmpty()){
             viewModelScope.launch(dispatcher.io) {
-                _addIssueResult.value = IssueStatus.Loading
+                _addIssueResult.postValue(IssueStatus.Loading)
                 when(val response = repository.addIssue(issue)){
-                    is OperationStatus.Error -> _addIssueResult.value = IssueStatus.Failed(response.message!!)
-                    is OperationStatus.Success -> _addIssueResult.value= IssueStatus.Success(response.message!!, emptyList())
+                    is OperationStatus.Error -> _addIssueResult.postValue(IssueStatus.Failed(response.message!!))
+                    is OperationStatus.Success -> _addIssueResult.postValue( IssueStatus.Success(response.message!!, emptyList()))
                 }
 
 

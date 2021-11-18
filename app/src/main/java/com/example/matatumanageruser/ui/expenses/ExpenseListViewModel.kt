@@ -10,9 +10,11 @@ import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.ui.issues.IssuesViewModel
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
                                                private val dispatcher: DispatcherProvider
 ) : ViewModel() {
@@ -44,14 +46,14 @@ class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
 
     fun getExpenseList(id: String){
         viewModelScope.launch(dispatcher.io){
-            _expenseList.value = ExpenseStatus.Loading
+            _expenseList.postValue(ExpenseStatus.Loading)
             when(val response = repository.getExpenses("","AzQBcMHYq1aZ5YzstecUxPuiHKz1","a","a")){
                 is OperationStatus.Error -> ExpenseStatus.Failed(response.message!!)
                 is OperationStatus.Success -> {
                     if (response.data!!.isEmpty()){
-                        ExpenseStatus.Failed("No data was returned")
+                        _expenseList.postValue( ExpenseStatus.Failed("No data was returned"))
                     }else{
-                        ExpenseStatus.Success("success", response.data)
+                        _expenseList.postValue(ExpenseStatus.Success("success", response.data))
                     }
 
                 }
@@ -62,10 +64,10 @@ class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
     fun createNewExpense(expense: Expense){
         if (expense.reason.isNotEmpty() && expense.amount > 0.0 ){
             viewModelScope.launch(dispatcher.io) {
-                _addExpenseResult.value = ExpenseStatus.Loading
+                _addExpenseResult.postValue(ExpenseStatus.Loading)
                 when(val response = repository.addExpense(expense)){
-                    is OperationStatus.Error -> _addExpenseResult.value = ExpenseStatus.Failed(response.message!!)
-                    is OperationStatus.Success -> _addExpenseResult.value= ExpenseStatus.Success(response.message!!, emptyList())
+                    is OperationStatus.Error -> _addExpenseResult.postValue(ExpenseStatus.Failed(response.message!!))
+                    is OperationStatus.Success -> _addExpenseResult.postValue(ExpenseStatus.Success(response.message!!, emptyList()))
                 }
 
 
