@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentLoginBinding
+import com.example.matatumanageruser.ui.other.showLongToast
 import com.example.matatumanageruser.ui.other.stringFromTl
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +46,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginStatus.observe(viewLifecycleOwner, {
             when(it){
                 is LoginViewModel.LoginStatus.Failed -> {
-
+                    showLongToast(it.errorText)
                 }
                 is LoginViewModel.LoginStatus.Success -> {
                     moveToDashboard()

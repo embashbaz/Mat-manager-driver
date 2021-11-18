@@ -16,6 +16,11 @@ object Constant {
     val NOTIFICATION_CHANNEL_NAME = "Tracking"
     val NOTIFICATION_ID = 1
 
+    const val SINGLE_DRIVER = "driver"
+
+    const val SINGLE_BUS = "bus"
+
+
     const val DRIVER_EXPENSE = "driver_expense"
     const val DRIVER_ISSUE = "driver_issue"
 

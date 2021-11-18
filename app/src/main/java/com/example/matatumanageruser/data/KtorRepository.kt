@@ -15,7 +15,7 @@ class KtorRepository  @Inject constructor(
 
             var uId = mAuth.signInWithEmailAndPassword(email, password).await().user!!.uid
             if (!!uId.isNullOrEmpty()){
-                val response = api.getDrivers("", uId)
+                val response = api.getDrivers(Constant.SINGLE_DRIVER, uId)
                 val result = response.body()
                 if(response.isSuccessful && result != null){
                     OperationStatus.Success(result)
@@ -33,7 +33,7 @@ class KtorRepository  @Inject constructor(
 
     override suspend fun getBus(plate: String): OperationStatus<Bus> {
         return  try{
-            val response = api.getBus("", plate)
+            val response = api.getBus(Constant.SINGLE_BUS, plate)
             val result = response.body()
             if(response.isSuccessful && result != null){
                 OperationStatus.Success(result)
@@ -232,7 +232,7 @@ class KtorRepository  @Inject constructor(
         endDate: String
     ): OperationStatus<List<Issue>> {
         return  try{
-            val response = api.getIssues(Constant.DRIVER_EXPENSE, id, startDate, endDate)
+            val response = api.getIssues(Constant.DRIVER_ISSUE, id, startDate, endDate)
             val result = response.body()
             if(response.isSuccessful && !result!!.isEmpty()!!){
                 OperationStatus.Success(result)
