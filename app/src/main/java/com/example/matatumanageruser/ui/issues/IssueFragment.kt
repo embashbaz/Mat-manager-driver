@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.databinding.FragmentIssueBinding
@@ -18,7 +19,8 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     private lateinit var issueBinding: FragmentIssueBinding
     private val issueListViewModel: IssuesViewModel by viewModels()
     private lateinit var  defaultRecyclerAdapter: DefaultRecyclerAdapter
-    private var driverId = ""
+    private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +49,7 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     }
 
     private fun getIssues(){
+
         issueListViewModel.getIssues(driverId)
         issueListViewModel.issueList.observe(viewLifecycleOwner, {
             when(it){
@@ -93,6 +96,7 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     }
 
     override fun onSaveButtonClicked(issue: Issue) {
+        issue.driverId = driverId
         issueListViewModel.createNewIssue(issue)
         issueListViewModel.addIssueResult.observe(viewLifecycleOwner, {
             when(it){

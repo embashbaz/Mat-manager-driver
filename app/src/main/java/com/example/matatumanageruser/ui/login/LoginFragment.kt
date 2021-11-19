@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentLoginBinding
 import com.example.matatumanageruser.ui.other.showLongToast
@@ -49,6 +50,7 @@ class LoginFragment : Fragment() {
                     showLongToast(it.errorText)
                 }
                 is LoginViewModel.LoginStatus.Success -> {
+                    (activity?.application as MatManagerUserApp).driverObject = it.driver
                     moveToDashboard()
                 }
             }

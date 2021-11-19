@@ -5,6 +5,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.data.Expense
 import com.example.matatumanageruser.databinding.FragmentExpenseListBinding
@@ -20,7 +21,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
     private lateinit var expenseListBinding: FragmentExpenseListBinding
     private val expenseListViewModel : ExpenseListViewModel by viewModels()
     private lateinit var  defaultRecyclerAdapter: DefaultRecyclerAdapter
-    private var driverId = ""
+    private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
 
 
     override fun onCreateView(
@@ -102,6 +103,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
     }
 
     override fun onSaveButtonClicked(expense: Expense) {
+        expense.driverId = driverId
         expenseListViewModel.createNewExpense(expense)
         expenseListViewModel.addExpenseResult.observe(viewLifecycleOwner, {
             when(it){

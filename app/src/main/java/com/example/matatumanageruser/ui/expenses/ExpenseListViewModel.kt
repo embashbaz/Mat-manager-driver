@@ -47,7 +47,7 @@ class ExpenseListViewModel @Inject constructor(val repository: MainRepository,
     fun getExpenseList(id: String){
         viewModelScope.launch(dispatcher.io){
             _expenseList.postValue(ExpenseStatus.Loading)
-            when(val response = repository.getExpenses("","AzQBcMHYq1aZ5YzstecUxPuiHKz1","a","a")){
+            when(val response = repository.getExpenses("",id,"a","a")){
                 is OperationStatus.Error -> ExpenseStatus.Failed(response.message!!)
                 is OperationStatus.Success -> {
                     if (response.data!!.isEmpty()){
