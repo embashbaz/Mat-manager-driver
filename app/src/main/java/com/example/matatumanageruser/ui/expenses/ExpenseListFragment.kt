@@ -11,6 +11,7 @@ import com.example.matatumanageruser.databinding.FragmentExpenseListBinding
 import com.example.matatumanageruser.ui.expenseDetail.ExpenseDetailDialog
 import com.example.matatumanageruser.ui.issues.IssuesViewModel
 import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
+import com.example.matatumanageruser.ui.other.showLongToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -46,6 +47,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
             }
 
         })
+
     }
 
     private fun getExpenses() {
@@ -84,6 +86,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
         expenseDialog.setListener(this)
         expenseDialog.show(parentFragmentManager, "Expense")
 
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -104,6 +107,10 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
             when(it){
                 is ExpenseListViewModel.ExpenseStatus.Success-> {
 
+                }
+
+                is ExpenseListViewModel.ExpenseStatus.Failed-> {
+                    showLongToast("Error: "+it.errorText)
                 }
             }
 

@@ -24,16 +24,17 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
             issueDetailBinding = IssueDialogBinding.inflate(inflater)
 
             val view = issueDetailBinding.root
+            builder.setView(view)
 
             if(type){
                 changeViewBehaviour()
                 populateView()
-            }else{
-                createIssue()
             }
 
             issueDetailBinding.saveIssueBt.setOnClickListener {
+                createIssue()
                 listener.onSaveButtonClicked(issue!!)
+
             }
 
 
@@ -52,6 +53,7 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
     @SuppressLint("SetTextI18n")
     private fun populateView() {
         if(issue != null){
+            issueDetailBinding.plateIssueDialog.editText!!.setText(issue!!.busPlate)
             issueDetailBinding.commentIssueDialog.editText!!.setText(issue!!.comment)
             issueDetailBinding.moreInfoIssueDetailTxt.setText(
                 issue!!.date + "\n"+
@@ -63,7 +65,7 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
     }
 
     private fun createIssue() {
-        issueDetailBinding.saveIssueBt.setOnClickListener {
+
             issue = Issue(
                 getDate(),
                 "",
@@ -74,7 +76,6 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
                 issueDetailBinding.commentIssueDialog.editText!!.text.toString()
             )
 
-        }
         }
 
     interface IssueDetailDialogListener{

@@ -82,7 +82,7 @@ class DefaultRecyclerAdapter (onClick: (Any) -> Unit) :
             fun from(parent: ViewGroup, onClick: (Any ) -> Unit) : ViewHolder{
                 val layoutInflater = LayoutInflater.from(parent.context)
 
-                return  ViewHolder(GeneralRecyclerItemBinding.inflate(layoutInflater), onClick)
+                return  ViewHolder(GeneralRecyclerItemBinding.inflate(layoutInflater, parent, false), onClick)
             }
         }
     }

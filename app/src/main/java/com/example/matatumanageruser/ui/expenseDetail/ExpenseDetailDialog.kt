@@ -23,12 +23,17 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
 
             val inflater = requireActivity().layoutInflater;
             expenseDetailBiding = ExpenseDialogBinding.inflate(inflater)
+            val view = expenseDetailBiding.root
+            builder.setView(view)
 
             if(type){
                 changeViewBehaviour()
                 populateView()
-            }else{
+            }
+
+            expenseDetailBiding.saveExpenseBt.setOnClickListener {
                 createExpense()
+                listener.onSaveButtonClicked(expense!!)
             }
 
             builder.create()
@@ -37,7 +42,7 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
     }
 
     private fun createExpense() {
-        expenseDetailBiding.saveExpenseBt.setOnClickListener {
+
             expense = Expense(
                 getDate(),
                 "",
@@ -47,7 +52,7 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
                 stringFromTl(expenseDetailBiding.reasonExpenseDialog),
                 stringFromTl(expenseDetailBiding.commentExpenseDialog)
             )
-        }
+
     }
 
     private fun populateView() {
