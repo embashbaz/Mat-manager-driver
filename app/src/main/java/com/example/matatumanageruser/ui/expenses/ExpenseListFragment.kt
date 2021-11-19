@@ -34,10 +34,15 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
         val view = expenseListBinding.root
         defaultRecyclerAdapter = DefaultRecyclerAdapter { expense -> onExpenseClicked(expense) }
 
-        getExpenses()
+
         newExpense()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getExpenses()
     }
 
     private fun newExpense() {
@@ -56,9 +61,28 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
         expenseListViewModel.expenseList.observe(viewLifecycleOwner, {
             when(it){
                 is ExpenseListViewModel.ExpenseStatus.Success -> {
-                    defaultRecyclerAdapter.setData(it.expenses as ArrayList<Any>)
-                    setRecyclerView()
+                    if(!it.expenses.isEmpty()) {
+                        defaultRecyclerAdapter.setData(it.expenses as ArrayList<Any>)
+                        defaultRecyclerAdapter.notifyDataSetChanged()
+                        setRecyclerView()
+                        hideNoDataText()
+                        hideProgressBar()
+                    }else{
+                        showNoDataText()
+                    }
                 }
+
+                is ExpenseListViewModel.ExpenseStatus.Failed -> {
+                    showNoDataText()
+                    hideProgressBar()
+                }
+
+                is ExpenseListViewModel.ExpenseStatus.Loading -> {
+                    showProgressBar()
+                    hideNoDataText()
+                }
+
+
             }
 
         })
@@ -90,6 +114,22 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
 
     }
 
+    private fun hideNoDataText(){
+        expenseListBinding.noDataTxtExpenseList.visibility = View.INVISIBLE
+    }
+
+    private fun hideProgressBar(){
+        expenseListBinding.progressBarExpenseList.visibility = View.INVISIBLE
+    }
+
+    private fun showNoDataText(){
+        expenseListBinding.noDataTxtExpenseList.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar(){
+        expenseListBinding.progressBarExpenseList.visibility = View.VISIBLE
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.expense_list_menu, menu)
     }
@@ -108,7 +148,8 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
         expenseListViewModel.addExpenseResult.observe(viewLifecycleOwner, {
             when(it){
                 is ExpenseListViewModel.ExpenseStatus.Success-> {
-
+                    showLongToast("Expense Added")
+                   getExpenses()
                 }
 
                 is ExpenseListViewModel.ExpenseStatus.Failed-> {
@@ -117,6 +158,8 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
             }
 
         })
+
+
     }
 
 }

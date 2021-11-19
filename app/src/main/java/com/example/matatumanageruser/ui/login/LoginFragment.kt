@@ -48,13 +48,26 @@ class LoginFragment : Fragment() {
             when(it){
                 is LoginViewModel.LoginStatus.Failed -> {
                     showLongToast(it.errorText)
+                    hideProgressBar()
                 }
                 is LoginViewModel.LoginStatus.Success -> {
                     (activity?.application as MatManagerUserApp).driverObject = it.driver
                     moveToDashboard()
+                    hideProgressBar()
+                }
+                is LoginViewModel.LoginStatus.Loading -> {
+                    showProgressBar()
                 }
             }
         })
+    }
+
+    private fun hideProgressBar(){
+        loginBinding.progressBarLogin.visibility = View.INVISIBLE
+    }
+
+    private fun showProgressBar(){
+        loginBinding.progressBarLogin.visibility = View.VISIBLE
     }
 
     fun moveToDashboard(){

@@ -46,8 +46,9 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
     }
 
     private fun changeViewBehaviour() {
-        issueDetailBinding.commentIssueDialog.visibility = View.INVISIBLE
+        issueDetailBinding.saveIssueBt.visibility = View.INVISIBLE
         issueDetailBinding.commentIssueDialog.isEnabled = false
+        issueDetailBinding.plateIssueDialog.isEnabled = false
     }
 
     @SuppressLint("SetTextI18n")
@@ -57,7 +58,7 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
             issueDetailBinding.commentIssueDialog.editText!!.setText(issue!!.comment)
             issueDetailBinding.moreInfoIssueDetailTxt.setText(
                 issue!!.date + "\n"+
-                                                             issue!!.busPlate + "\n"+
+
                                                             issue!!.reason + "\n"+
                                                             issue!!.status)
 

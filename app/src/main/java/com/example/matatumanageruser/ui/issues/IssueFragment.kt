@@ -31,11 +31,16 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
         issueBinding = FragmentIssueBinding.inflate(inflater, container, false)
         val view = issueBinding.root
         defaultRecyclerAdapter = DefaultRecyclerAdapter { issue -> onIssueClicked(issue) }
-        getIssues()
+
 
         newIssue()
 
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getIssues()
     }
 
     private fun newIssue() {
@@ -54,8 +59,25 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
         issueListViewModel.issueList.observe(viewLifecycleOwner, {
             when(it){
                 is IssuesViewModel.IssueStatus.Success -> {
+
+                    if(!it.issues.isEmpty()){
+
                     defaultRecyclerAdapter.setData(it.issues as ArrayList<Any>)
                     setRecyclerView()
+                        hideNoDataText()
+                        hideProgressBar()
+                    }else{
+                        showNoDataText()
+                    }
+                }
+                is IssuesViewModel.IssueStatus.Failed ->{
+                    showNoDataText()
+                    hideProgressBar()
+                }
+
+                is IssuesViewModel.IssueStatus.Loading ->{
+                    showProgressBar()
+                    hideNoDataText()
                 }
             }
         })
@@ -81,6 +103,22 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
         val issueDialog = IssueDetailDialog(type, issue)
         issueDialog.setListener(this)
         issueDialog.show(parentFragmentManager, "Issue")
+    }
+
+    private fun hideNoDataText(){
+        issueBinding.noDataTxtIssueList.visibility = View.INVISIBLE
+    }
+
+    private fun hideProgressBar(){
+       issueBinding.progressBarIssueList.visibility = View.INVISIBLE
+    }
+
+    private fun showNoDataText(){
+        issueBinding.noDataTxtIssueList.visibility = View.VISIBLE
+    }
+
+    private fun showProgressBar(){
+        issueBinding.progressBarIssueList.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
