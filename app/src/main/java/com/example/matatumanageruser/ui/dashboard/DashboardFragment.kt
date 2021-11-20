@@ -75,8 +75,10 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         })
 
         dashboardViewModel.tripCardClicked.observe(viewLifecycleOwner, {
+            if (it){
             this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
             dashboardViewModel.tripCardClicked(false)
+            }
         })
     }
 

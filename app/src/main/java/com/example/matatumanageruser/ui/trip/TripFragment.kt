@@ -10,7 +10,9 @@ import com.example.matatumanageruser.databinding.FragmentTripBinding
 import com.example.matatumanageruser.databinding.FragmentTripListBinding
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TripFragment : Fragment() {
 
     lateinit var tripBinding: FragmentTripBinding
@@ -67,5 +69,7 @@ class TripFragment : Fragment() {
         super.onSaveInstanceState(outState)
         mapView?.onSaveInstanceState(outState)
     }
+
+
 
 }

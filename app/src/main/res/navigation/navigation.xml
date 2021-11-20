@@ -5,6 +5,10 @@
     android:id="@+id/navigation"
     app:startDestination="@id/loginFragment">
 
+    <action android:id="@+id/action_global_tripFragment"
+        app:destination="@+id/tripFragment"
+        app:launchSingleTop="true"/>
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.matatumanageruser.ui.login.LoginFragment"

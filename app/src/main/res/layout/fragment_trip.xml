@@ -7,7 +7,7 @@
     tools:context=".ui.trip.TripFragment">
 
     <com.google.android.gms.maps.MapView
-        android:id="@+id/project_map-view"
+        android:id="@+id/project_map_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"

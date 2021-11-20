@@ -15,3 +15,4 @@
 local.properties
 app/google-services.json
 app/src/main/java/com/example/matatumanageruser/utils/Secret.kt
+app/src/main/res/values/google_maps_api.xml

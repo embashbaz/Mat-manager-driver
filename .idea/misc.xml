@@ -13,7 +13,7 @@
         <entry key="app/src/main/res/layout/fragment_issue.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.240625" />
-        <entry key="app/src/main/res/layout/fragment_trip.xml" value="0.11347517730496454" />
+        <entry key="app/src/main/res/layout/fragment_trip.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_trip_list.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/general_recycler_item.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/issue_dialog.xml" value="0.240625" />
