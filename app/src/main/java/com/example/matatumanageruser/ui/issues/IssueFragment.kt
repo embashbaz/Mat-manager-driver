@@ -19,6 +19,7 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     private lateinit var issueBinding: FragmentIssueBinding
     private val issueListViewModel: IssuesViewModel by viewModels()
     private lateinit var  defaultRecyclerAdapter: DefaultRecyclerAdapter
+
     private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
 
 

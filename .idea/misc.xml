@@ -10,7 +10,7 @@
         <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.21666666666666667" />
         <entry key="app/src/main/res/layout/fragment_driver_detail.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_expense_list.xml" value="0.240625" />
-        <entry key="app/src/main/res/layout/fragment_issue.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_issue.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_statistics.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_trip_list.xml" value="0.240625" />

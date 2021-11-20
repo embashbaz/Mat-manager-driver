@@ -25,6 +25,7 @@ object Constant {
     const val DRIVER_ISSUE = "driver_issue"
 
     val SHOW_TRACKING_FRAGMENT = "SHOW_TRACKING_FRAGMENT"
+    const val REQUEST_CODE_LOCATION_PERMISSION = 0
 
 
 
