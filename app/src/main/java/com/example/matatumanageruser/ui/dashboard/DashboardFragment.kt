@@ -46,13 +46,18 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
 
         observeCardClicked()
         listenButtonClicked()
-        setStat()
+
         observeDayCreated()
         observeDayEnded()
 
 
         return view
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        setStat()
     }
 
     private fun setStat() {
@@ -103,7 +108,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                     ( activity?.application as MatManagerUserApp).statisticsObject = it.statistics
                     setStat()
                     sendCommmandToTrackingService(Constant.ACTION_START_OR_RESUME_SERVICE)
-                   this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
+                   //this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
                 }
 
                 is DashboardViewModel.StartDayStatus.Failed -> {

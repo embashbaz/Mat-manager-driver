@@ -87,7 +87,7 @@ constructor(private var repository: MainRepository,
     }
 
     suspend fun startDay(plate: String, driverId: String, bus: Bus){
-        val stat = Statistics(dayId = getDate(), busPlate = plate, driverId = driverId)
+        val stat = Statistics(dayId = getDate(), busPlate = plate, driverId = driverId, "this",timeEnded = "a",comment = "this")
         when(val response = repository.addStat(stat)){
             is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Failed(response.message!!))
             is OperationStatus.Success -> {

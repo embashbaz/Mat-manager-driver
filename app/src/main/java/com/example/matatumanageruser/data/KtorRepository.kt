@@ -1,9 +1,12 @@
 package com.example.matatumanageruser.data
 
+import android.util.Log
 import com.example.matatumanageruser.utils.Constant
 import com.example.matatumanageruser.utils.OperationStatus
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import javax.inject.Inject
 
 class KtorRepository  @Inject constructor(
@@ -33,7 +36,7 @@ class KtorRepository  @Inject constructor(
 
     override suspend fun getBus(plate: String): OperationStatus<Bus> {
         return  try{
-            val response = api.getBus(Constant.SINGLE_BUS, plate)
+            val response = api.getBus(Constant.SINGLE_BUS, plate, "a")
             val result = response.body()
             if(response.isSuccessful && result != null){
                 OperationStatus.Success(result)
@@ -65,7 +68,7 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createTrip(trip)
             val result = response.body()
-            if(response.isSuccessful && result != null && result.has("true")){
+            if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
@@ -80,7 +83,10 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createStat(statistics)
             val result = response.body()
-            if(response.isSuccessful && result != null && result.has("true")){
+            val errorBody = response.errorBody()?.charStream()?.readText()?:""
+            Log.d("THISSSSSS", errorBody)
+
+            if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
@@ -95,7 +101,7 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createExpense(expense)
             val result = response.body()
-            if(response.isSuccessful && result != null && result.has("true")){
+            if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
@@ -145,7 +151,7 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.updateStat(statistics)
             val result = response.body()
-            if(response.isSuccessful && result != null && result.has("true")){
+            if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
@@ -161,7 +167,7 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.updateBus(bus)
             val result = response.body()
-            if(response.isSuccessful && result != null && result.has("true")){
+            if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())

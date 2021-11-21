@@ -50,7 +50,8 @@ interface MatManagerApi {
     @GET(BUSES)
     suspend fun getBus(
         @Query("type") type: String,
-        @Query("id") adminId: String
+        @Query("id") adminId: String,
+        @Query("string_query") queryString: String
 
     ): Response<Bus>
 
