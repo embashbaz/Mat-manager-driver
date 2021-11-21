@@ -17,10 +17,13 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.matatumanageruser.MainActivity
+import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
+import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.utils.Constant
 import com.example.matatumanageruser.utils.Constant.FASTEST_LOCATION_INTERVAL
 import com.example.matatumanageruser.utils.Constant.LOCATION_UPDATE_INTERVAL
+import com.example.matatumanageruser.utils.convertToJsonArray
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -35,10 +38,6 @@ import com.google.android.gms.maps.model.LatLng
 
 
 class TrackingService :  LifecycleService(){
-
-
-
-
     var serviceIsStarted = true
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -134,6 +133,7 @@ class TrackingService :  LifecycleService(){
             pathPoints.value?.apply {
                 last().add(pos)
                 pathPoints.postValue(this)
+                updateStat()
             }
         }
     }
@@ -186,6 +186,18 @@ class TrackingService :  LifecycleService(){
         )
 
         notificationManager.createNotificationChannel(channel)
+
+    }
+
+    fun updateStat(){
+        var todayStat = ( application as MatManagerUserApp).statisticsObject
+        if (todayStat != null){
+            todayStat.locationLat = currentLocation.value!!.latitude
+            todayStat.locationLng = currentLocation.value!!.longitude
+            if (pathPoints.value!!.isNotEmpty())
+            todayStat.pathPoints = convertToJsonArray(pathPoints.value!!)
+            ( application as MatManagerUserApp).statisticsObject = todayStat
+        }
 
     }
 }

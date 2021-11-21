@@ -7,7 +7,7 @@
         <entry key="app/src/main/res/layout/expense_dialog.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_blank.xml" value="0.22916666666666666" />
         <entry key="app/src/main/res/layout/fragment_bus_detail.xml" value="0.240625" />
-        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.21666666666666667" />
+        <entry key="app/src/main/res/layout/fragment_dashboard.xml" value="0.75" />
         <entry key="app/src/main/res/layout/fragment_driver_detail.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_expense_list.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/fragment_issue.xml" value="0.1" />

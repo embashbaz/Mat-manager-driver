@@ -158,7 +158,18 @@ class KtorRepository  @Inject constructor(
 
 
     override suspend fun updateBus(bus: Bus): OperationStatus<String> {
-        TODO("Not yet implemented")
+        return  try{
+            val response = api.updateBus(bus)
+            val result = response.body()
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
+            }else{
+                OperationStatus.Error(response.message())
+            }
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
     }
 
     override suspend fun updateIssue(issue: Issue): OperationStatus<String> {

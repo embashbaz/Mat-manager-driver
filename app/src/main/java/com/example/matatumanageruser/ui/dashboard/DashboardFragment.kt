@@ -9,19 +9,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
+import com.example.matatumanageruser.data.Issue
+import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.databinding.FragmentDashboardBinding
 import com.example.matatumanageruser.services.TrackingUtils
+import com.example.matatumanageruser.ui.StartDayDialog
+import com.example.matatumanageruser.ui.issueDetail.IssueDetailDialog
+import com.example.matatumanageruser.ui.other.showLongToast
 import com.example.matatumanageruser.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks {
+class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, StartDayDialog.SaveDayDialogListener {
 
     private lateinit var dashboardBinding: FragmentDashboardBinding
     private val dashboardViewModel: DashboardViewModel by viewModels()
+    private var locationPermissionsGranted = false
+    private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
+    private var stat: Statistics? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,10 +41,16 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         observeCardClicked()
         listenButtonClicked()
+        setStat()
+        observeDayCreated()
 
 
         return view
 
+    }
+
+    private fun setStat() {
+        stat = ( activity?.application as MatManagerUserApp).statisticsObject
     }
 
     private fun listenButtonClicked() {
@@ -49,13 +64,39 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks {
 
         dashboardBinding.goTripCard.setOnClickListener {
             checkOrRequestPermissions()
+            if(locationPermissionsGranted){
+                dashboardViewModel.tripCardClicked(true)
+            }
         }
 
         dashboardBinding.goToPerformanceCard.setOnClickListener {  }
 
-        dashboardBinding.startDayCard.setOnClickListener {  }
+        dashboardBinding.startDayCard.setOnClickListener {
+            checkOrRequestPermissions()
+            if(locationPermissionsGranted && stat == null){
+                    openStartDayDialog()
+            }
+        }
 
     }
+
+    private fun observeDayCreated(){
+        dashboardViewModel.startDayResult.observe(viewLifecycleOwner, {
+            when(it){
+                is DashboardViewModel.StartDayStatus.Success -> {
+                   showLongToast(it.resultText)
+                   this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
+                }
+
+                is DashboardViewModel.StartDayStatus.Failed -> {
+                    showLongToast(it.errorText)
+                }
+
+
+            }
+        })
+    }
+
 
     private fun observeCardClicked() {
 
@@ -82,9 +123,15 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks {
         })
     }
 
+    fun openStartDayDialog(){
+        val startDayDialog = StartDayDialog()
+        startDayDialog.setListener(this)
+        startDayDialog.show(parentFragmentManager, "Issue")
+    }
+
     private fun checkOrRequestPermissions() {
         if(TrackingUtils.hasLocationPermissions(requireContext())) {
-            dashboardViewModel.tripCardClicked(true)
+            locationPermissionsGranted = true
         }
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
             EasyPermissions.requestPermissions(
@@ -123,6 +170,12 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onSaveButtonClicked(plate: String) {
+        if (stat == null){
+            dashboardViewModel.startDayRequest(plate, driverId)
+        }
     }
 }
 
