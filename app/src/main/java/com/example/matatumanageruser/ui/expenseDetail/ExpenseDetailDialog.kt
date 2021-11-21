@@ -47,7 +47,7 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
                 getDate(),
                 "",
                 stringFromTl(expenseDetailBiding.plateExpenseDialog),
-                "AzQBcMHYq1aZ5YzstecUxPuiHKz1",
+                "",
                 stringFromTl(expenseDetailBiding.amountExpenseDialog).toDouble(),
                 stringFromTl(expenseDetailBiding.reasonExpenseDialog),
                 stringFromTl(expenseDetailBiding.commentExpenseDialog)

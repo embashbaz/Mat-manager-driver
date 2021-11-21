@@ -1,6 +1,7 @@
 package com.example.matatumanageruser.ui.dashboard
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import com.example.matatumanageruser.R
 import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.databinding.FragmentDashboardBinding
+import com.example.matatumanageruser.services.TrackingService
 import com.example.matatumanageruser.services.TrackingUtils
 import com.example.matatumanageruser.ui.StartDayDialog
 import com.example.matatumanageruser.ui.dialogs.NoticeDialogFragment
@@ -100,6 +102,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                    showLongToast(it.resultText)
                     ( activity?.application as MatManagerUserApp).statisticsObject = it.statistics
                     setStat()
+                    sendCommmandToTrackingService(Constant.ACTION_START_OR_RESUME_SERVICE)
                    this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
                 }
 
@@ -112,12 +115,20 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         })
     }
 
+    private fun sendCommmandToTrackingService(action: String) =
+        Intent(requireContext(), TrackingService::class.java).also {
+            it.action = action
+            requireContext().startService(it)
+
+    }
+
     private fun observeDayEnded(){
         dashboardViewModel.endDayResult.observe(viewLifecycleOwner, {
             when(it){
                 is DashboardViewModel.StartDayStatus.Success -> {
                     showLongToast(it.resultText)
                     ( activity?.application as MatManagerUserApp).statisticsObject = null
+                    sendCommmandToTrackingService(Constant.ACTION_STOP_SERVICE)
                     setStat()
                 }
 

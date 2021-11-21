@@ -81,7 +81,7 @@ class TrackingService :  LifecycleService(){
                 }
 
                 Constant.ACTION_STOP_SERVICE -> {
-
+                    stopService(intent)
                 }
 
             }

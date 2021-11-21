@@ -134,6 +134,7 @@ constructor(private var repository: MainRepository,
     }
 
     suspend fun endDayStat(statistics: Statistics){
+        statistics.timeEnded = getDate()
         when(val response = repository.updateStat(statistics)){
             is OperationStatus.Error -> _endDayResult.postValue(StartDayStatus.Failed(response.message!!))
             is OperationStatus.Success -> {

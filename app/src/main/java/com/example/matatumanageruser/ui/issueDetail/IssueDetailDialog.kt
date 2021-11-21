@@ -10,6 +10,7 @@ import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.databinding.IssueDialogBinding
 import com.example.matatumanageruser.ui.issues.IssueFragment
 import com.example.matatumanageruser.ui.other.getDate
+import com.example.matatumanageruser.ui.other.stringFromTl
 
 class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment(){
 
@@ -71,8 +72,8 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
                 getDate(),
                 "",
                 "Created",
-                "Az455",
-                "AzQBcMHYq1aZ5YzstecUxPuiHKz1",
+                stringFromTl(issueDetailBinding.plateIssueDialog),
+                "",
                 issueDetailBinding.issueTypeSpinner.selectedItem.toString(),
                 issueDetailBinding.commentIssueDialog.editText!!.text.toString()
             )
