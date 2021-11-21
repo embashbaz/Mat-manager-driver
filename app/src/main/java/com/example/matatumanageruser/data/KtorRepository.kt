@@ -130,8 +130,8 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.updateTrip(trip)
             val result = response.body()
-            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
-                OperationStatus.Success(result)
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
             }
@@ -145,8 +145,8 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.updateStat(statistics)
             val result = response.body()
-            if(response.isSuccessful && result != null && !result.isNullOrEmpty()){
-                OperationStatus.Success(result)
+            if(response.isSuccessful && result != null && result.has("true")){
+                OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
             }

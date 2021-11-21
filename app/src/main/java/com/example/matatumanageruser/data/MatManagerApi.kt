@@ -28,10 +28,10 @@ interface MatManagerApi {
     suspend fun updateBus(@Body bus: Bus): Response<JsonObject>
 
     @POST(UPDATE_TRIPS)
-    suspend fun updateTrip(@Body trip: Trip): Response<String>
+    suspend fun updateTrip(@Body trip: Trip): Response<JsonObject>
 
     @POST(UPDATE_STATS)
-    suspend fun updateStat(@Body statistics: Statistics): Response<String>
+    suspend fun updateStat(@Body statistics: Statistics): Response<JsonObject>
 
 
     @GET(MAT_ADMIN)

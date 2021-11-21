@@ -41,6 +41,10 @@ constructor(private var repository: MainRepository,
     val startDayResult: LiveData<StartDayStatus>
         get() = _startDayResult
 
+    private var _endDayResult = MutableLiveData<StartDayStatus>(StartDayStatus.Empty)
+    val endDayResult: LiveData<StartDayStatus>
+        get() = _endDayResult
+
     fun expenseCardClicked(action: Boolean){
         _expenseCardClicked.value = action
     }
@@ -87,17 +91,54 @@ constructor(private var repository: MainRepository,
         when(val response = repository.addStat(stat)){
             is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Failed(response.message!!))
             is OperationStatus.Success -> {
-                updateBus(bus)
+                updateBusToInService(bus, stat)
                // _startDayResult.postValue(StartDayStatus.Success("Day has started"))
             }
         }
     }
 
-    suspend fun updateBus(bus: Bus){
+    suspend fun updateBusToInService(bus: Bus, statistics: Statistics){
         bus.status = "in service"
         when(val response = repository.updateBus(bus)){
-            is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Success("Day was started but bus was not updated"))
-            is OperationStatus.Success -> _startDayResult.postValue(StartDayStatus.Success("Day was started"))
+            is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Success("Day was started but bus was not updated", statistics))
+            is OperationStatus.Success -> _startDayResult.postValue(StartDayStatus.Success("Day was started", statistics))
+        }
+    }
+
+    fun endDayRequest(stat: Statistics){
+        viewModelScope.launch(dispatcher.io) {
+            _endDayResult.postValue(StartDayStatus.Loading)
+            when (val busResponse = repository.getBus(stat.busPlate)) {
+                is OperationStatus.Error -> {
+                    _endDayResult.postValue(StartDayStatus.Failed(busResponse.message!!))
+
+                }
+                is OperationStatus.Success -> {
+                       updateBusToActive( busResponse.data!!, stat)
+
+                }
+            }
+
+        }
+
+    }
+
+    suspend fun updateBusToActive(bus: Bus, statistics: Statistics){
+        bus.status = "active"
+        when(val response = repository.updateBus(bus)){
+            is OperationStatus.Error -> _endDayResult.postValue(StartDayStatus.Failed(response.message!!))
+            is OperationStatus.Success -> {
+                endDayStat(statistics)
+            }
+        }
+    }
+
+    suspend fun endDayStat(statistics: Statistics){
+        when(val response = repository.updateStat(statistics)){
+            is OperationStatus.Error -> _endDayResult.postValue(StartDayStatus.Failed(response.message!!))
+            is OperationStatus.Success -> {
+                _endDayResult.postValue(StartDayStatus.Success("Day ended", null))
+            }
         }
     }
 
@@ -106,7 +147,7 @@ constructor(private var repository: MainRepository,
 
 
     sealed class StartDayStatus{
-        class Success(val resultText: String): StartDayStatus()
+        class Success(val resultText: String, var statistics: Statistics?): StartDayStatus()
         class Failed(val errorText: String): StartDayStatus()
         object Loading: StartDayStatus()
         object Empty: StartDayStatus()

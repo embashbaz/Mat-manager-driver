@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.matatumanageruser.MatManagerUserApp
@@ -16,15 +17,17 @@ import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.databinding.FragmentDashboardBinding
 import com.example.matatumanageruser.services.TrackingUtils
 import com.example.matatumanageruser.ui.StartDayDialog
+import com.example.matatumanageruser.ui.dialogs.NoticeDialogFragment
 import com.example.matatumanageruser.ui.issueDetail.IssueDetailDialog
 import com.example.matatumanageruser.ui.other.showLongToast
 import com.example.matatumanageruser.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_dashboard.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, StartDayDialog.SaveDayDialogListener {
+class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, StartDayDialog.SaveDayDialogListener, NoticeDialogFragment.NoticeDialogListener {
 
     private lateinit var dashboardBinding: FragmentDashboardBinding
     private val dashboardViewModel: DashboardViewModel by viewModels()
@@ -43,6 +46,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         listenButtonClicked()
         setStat()
         observeDayCreated()
+        observeDayEnded()
 
 
         return view
@@ -51,6 +55,11 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
 
     private fun setStat() {
         stat = ( activity?.application as MatManagerUserApp).statisticsObject
+        if(stat!= null){
+            dashboardBinding.startDayTextDashboard.setText("End day")
+        }else{
+            dashboardBinding.startDayTextDashboard.setText("Start Day")
+        }
     }
 
     private fun listenButtonClicked() {
@@ -72,9 +81,13 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         dashboardBinding.goToPerformanceCard.setOnClickListener {  }
 
         dashboardBinding.startDayCard.setOnClickListener {
-            checkOrRequestPermissions()
-            if(locationPermissionsGranted && stat == null){
+            if (stat == null) {
+                checkOrRequestPermissions()
+                if (locationPermissionsGranted) {
                     openStartDayDialog()
+                }
+            }else{
+                openNoticeDialog("Yes", "Are you sure you want to end the day")
             }
         }
 
@@ -85,11 +98,31 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
             when(it){
                 is DashboardViewModel.StartDayStatus.Success -> {
                    showLongToast(it.resultText)
+                    ( activity?.application as MatManagerUserApp).statisticsObject = it.statistics
+                    setStat()
                    this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
                 }
 
                 is DashboardViewModel.StartDayStatus.Failed -> {
                     showLongToast(it.errorText)
+                }
+
+
+            }
+        })
+    }
+
+    private fun observeDayEnded(){
+        dashboardViewModel.endDayResult.observe(viewLifecycleOwner, {
+            when(it){
+                is DashboardViewModel.StartDayStatus.Success -> {
+                    showLongToast(it.resultText)
+                    ( activity?.application as MatManagerUserApp).statisticsObject = null
+                    setStat()
+                }
+
+                is DashboardViewModel.StartDayStatus.Failed -> {
+                    showLongToast(it.errorText+", please try again")
                 }
 
 
@@ -127,6 +160,13 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         val startDayDialog = StartDayDialog()
         startDayDialog.setListener(this)
         startDayDialog.show(parentFragmentManager, "Issue")
+    }
+
+    fun openNoticeDialog(positiveButton: String,  message: String){
+        val dialog = NoticeDialogFragment(positiveButton, message)
+        dialog.setListener(this)
+        dialog.show(parentFragmentManager, "Confirm you want to save picture")
+
     }
 
     private fun checkOrRequestPermissions() {
@@ -175,6 +215,15 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
     override fun onSaveButtonClicked(plate: String) {
         if (stat == null){
             dashboardViewModel.startDayRequest(plate, driverId)
+        }
+    }
+
+    override fun onDialogPositiveClick(dialog: DialogFragment) {
+        super.onDialogPositiveClick(dialog)
+        dialog.dismiss()
+        setStat()
+        if(stat!= null){
+            dashboardViewModel.endDayRequest(stat!!)
         }
     }
 }
