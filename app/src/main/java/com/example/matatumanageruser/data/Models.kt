@@ -58,6 +58,7 @@ data class Trip(
     var busPlate: String = "",
     var driverId: String = "",
     var pathPoints: String = "",
+    var pickupPoint: String = "",
     var moneyCollected: Double = 0.0,
     var timeStarted: String = "",
     var timeEnded: String = "",
@@ -104,4 +105,9 @@ data class Issue(
     var reason: String = "",
     var comment: String = ""
 
+)
+
+data class PredictionAutoComplete(
+    var primaryText: String = "",
+    var secondaryText: String = ""
 )

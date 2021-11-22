@@ -3,30 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:visibility="visible"
-    app:layout_behavior="com.example.matatumanageruser.TopSheetBehavior">
+    android:layout_height="wrap_content">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/first_location_search"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+
+    <TextView
+        android:id="@+id/locations_trip_detail_txt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="First Location"
-        app:layout_constraintEnd_toStartOf="@+id/add_places_to_trip"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/second_location_search"
+        android:id="@+id/amount_tl"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -34,27 +24,25 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
-        android:hint="Second Location"
+        android:hint="Fare collected"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/add_places_to_trip"
+        app:layout_constraintEnd_toStartOf="@+id/start_trip_bt"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/first_location_search">
+        app:layout_constraintTop_toBottomOf="@+id/locations_trip_detail_txt">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
-    <ImageButton
-        android:id="@+id/add_places_to_trip"
+    <Button
+        android:id="@+id/start_trip_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_baseline_search_24"
-        app:layout_constraintBottom_toBottomOf="@+id/second_location_search"
+        android:text="start day"
+        app:layout_constraintBottom_toBottomOf="@+id/amount_tl"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/second_location_search" />
-
+        app:layout_constraintTop_toTopOf="@+id/amount_tl" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

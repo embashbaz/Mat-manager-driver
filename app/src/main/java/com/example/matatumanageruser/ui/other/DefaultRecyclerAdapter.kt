@@ -12,7 +12,7 @@ import com.example.matatumanageruser.databinding.GeneralRecyclerItemBinding
 class DefaultRecyclerAdapter (onClick: (Any) -> Unit) :
     RecyclerView.Adapter<DefaultRecyclerAdapter.ViewHolder>() {
 
-    val mOnclick = onClick
+    var mOnclick = onClick
     val allItems = ArrayList<Any>()
 
 
