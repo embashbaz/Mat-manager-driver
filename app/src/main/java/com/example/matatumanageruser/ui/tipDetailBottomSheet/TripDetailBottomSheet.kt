@@ -40,6 +40,8 @@ class TripDetailBottomSheet(var trip: Trip): BottomSheetDialogFragment() {
     private fun startTrip() {
         tripDetailDialogBinding.startTripBt.setOnClickListener {
             trip.tripStatus = "started"
+            //yes this doesn't make sense, i just want to pass this data
+            trip.date = stringFromTl(tripDetailDialogBinding.amountTl)
             listener.onStartTripClicked(trip, true)
 
         }
