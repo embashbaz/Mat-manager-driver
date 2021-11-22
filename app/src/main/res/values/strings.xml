@@ -14,4 +14,12 @@
         <item>Food</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="stat_type">
+        <item>Number of trip</item>
+        <item>distance</item>
+        <item>Fare collected</item>
+        <item>Expenses</item>
+
+    </string-array>
 </resources>

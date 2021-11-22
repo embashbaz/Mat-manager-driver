@@ -17,6 +17,7 @@
         <entry key="app/src/main/res/layout/fragment_trip_list.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/general_recycler_item.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/issue_dialog.xml" value="0.240625" />
+        <entry key="app/src/main/res/layout/location_search_dialog.xml" value="0.15489130434782608" />
         <entry key="app/src/main/res/layout/start_day_dialog.xml" value="0.240625" />
         <entry key="app/src/main/res/menu/expense_list_menu.xml" value="0.11666666666666667" />
         <entry key="app/src/main/res/menu/issue_list_menu.xml" value="0.1287037037037037" />

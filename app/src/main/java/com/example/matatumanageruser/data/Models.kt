@@ -79,6 +79,7 @@ data class Statistics(
     var expense: Double = 0.0,
     var timeEnded: String = "",
     var maxSpeed: Double = 0.0,
+    var numberTrip : Int = 0,
     var comment: String = ""
 )
 
