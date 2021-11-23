@@ -2,7 +2,9 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="trip_list_menu" />
+    <item
+        android:id="@+id/trip_list_menu"
+        android:title ="Trip List" />
     <item
         android:id="@+id/new_trip_loc"
         android:title="New Trip" />

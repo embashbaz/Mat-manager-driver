@@ -38,6 +38,9 @@ class LocationSearchDialog : DialogFragment(){
             val inflater = requireActivity().layoutInflater;
             locationSearchDialogBinding = LocationSearchDialogBinding.inflate(inflater)
 
+            val view = locationSearchDialogBinding.root
+            builder.setView(view)
+
             locationSearchDialogBinding.addPlacesToTrip.setOnClickListener {
                 if (stringFromTl(locationSearchDialogBinding.firstLocationSearch).isNotEmpty() && stringFromTl(locationSearchDialogBinding.secondLocationSearch).isNotEmpty()) {
                     listener.onSearchLocation(

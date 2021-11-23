@@ -1,5 +1,6 @@
 package com.example.matatumanageruser.utils
 
+import android.util.Log
 import com.google.android.gms.maps.model.LatLng
 import com.google.common.io.CharStreams
 import com.google.gson.Gson
@@ -8,6 +9,7 @@ import com.google.gson.reflect.TypeToken
 
 
 fun convertToJsonArray(pathPoint: MutableList<MutableList<LatLng>>): String {
+    Log.d("Locationnnnn", Gson().toJson(pathPoint))
   return Gson().toJson(pathPoint)
 }
 

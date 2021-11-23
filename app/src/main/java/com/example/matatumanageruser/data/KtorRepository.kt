@@ -68,6 +68,9 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.createTrip(trip)
             val result = response.body()
+            val errorBody = response.errorBody()?.charStream()?.readText()?:""
+            Log.d("THISSSSSS", errorBody)
+
             if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{

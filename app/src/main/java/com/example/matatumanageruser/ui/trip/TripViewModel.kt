@@ -8,11 +8,14 @@ import com.example.matatumanageruser.data.Expense
 import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.data.Trip
 import com.example.matatumanageruser.ui.other.getDate
+import com.example.matatumanageruser.ui.stat.StatViewModel
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class TripViewModel  @Inject constructor(val repository: MainRepository,
                                          private val dispatcher: DispatcherProvider
 ) : ViewModel(){
@@ -24,6 +27,14 @@ class TripViewModel  @Inject constructor(val repository: MainRepository,
     private var _updateTrip = MutableLiveData<TripStatus>(TripStatus.Empty)
     val updateTrip: LiveData<TripStatus>
         get() = _updateTrip
+
+    fun setNewTripStatusToEmpty(){
+        _createNewTrip.value = TripStatus.Empty
+    }
+
+    fun setEndTripStatusToEmpty(){
+        _updateTrip.value = TripStatus.Empty
+    }
 
 
     fun createTrip(pickUpPoint: String, amount: String, busPlate: String, driverId: String){

@@ -61,6 +61,14 @@ constructor(private var repository: MainRepository,
         _profileCardClicked.value = action
     }
 
+    fun setStartDayEmpty(){
+        _startDayResult.value = StartDayStatus.Empty
+    }
+
+    fun setEndDayEmpty(){
+        _endDayResult.value = StartDayStatus.Empty
+    }
+
     fun startDayRequest(plate: String, driverId: String) {
 
         viewModelScope.launch(dispatcher.io) {

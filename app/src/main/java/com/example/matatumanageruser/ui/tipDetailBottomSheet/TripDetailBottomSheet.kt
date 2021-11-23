@@ -22,6 +22,9 @@ class TripDetailBottomSheet(var trip: Trip): BottomSheetDialogFragment() {
             val inflater = requireActivity().layoutInflater;
             tripDetailDialogBinding = TripDetailsBinding.inflate(inflater)
 
+            val view = tripDetailDialogBinding.root
+            builder.setView(view)
+
             tripDetailDialogBinding.locationsTripDetailTxt.setText(trip.pickupPoint)
             if (trip.tripStatus == "started"){
                 endTrip()

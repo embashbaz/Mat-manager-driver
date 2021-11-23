@@ -94,7 +94,10 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                     openStartDayDialog()
                 }
             }else{
-                openNoticeDialog("Yes", "Are you sure you want to end the day")
+                if(( activity?.application as MatManagerUserApp).activeTrip == null)
+                  openNoticeDialog("Yes", "Are you sure you want to end the day")
+                else
+                    showLongToast("Can not end the day while there is an active trip, end trip then try again")
             }
         }
 
@@ -116,7 +119,9 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                 }
 
 
+
             }
+           // dashboardViewModel.setStartDayEmpty()
         })
     }
 
@@ -143,6 +148,8 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
 
 
             }
+
+          //  dashboardViewModel.setEndDayEmpty()
         })
     }
 
