@@ -24,6 +24,7 @@ object Constant {
     const val DRIVER_EXPENSE = "driver_expense"
     const val DRIVER_ISSUE = "driver_issue"
     const val DRIVER_STAT = "driver_stat"
+    const val DRIVERS_TRIP = "driver_trip"
 
     val SHOW_TRACKING_FRAGMENT = "SHOW_TRACKING_FRAGMENT"
     const val REQUEST_CODE_LOCATION_PERMISSION = 0

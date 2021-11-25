@@ -192,8 +192,10 @@ class KtorRepository  @Inject constructor(
         endDate: String
     ): OperationStatus<List<Trip>> {
        return try{
-            val response = api.getTrips("", id, startDate, endDate)
+            val response = api.getTrips(Constant.DRIVERS_TRIP, id, startDate, endDate)
             val result = response.body()
+           val errorBody = response.errorBody()?.charStream()?.readText()?:""
+           Log.d("THISSSSSS", errorBody)
             if(response.isSuccessful && !result!!.isEmpty()!!){
                 OperationStatus.Success(result)
             }else{

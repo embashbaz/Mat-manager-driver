@@ -121,6 +121,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
                     (activity?.application as MatManagerUserApp).activeTrip = it.trip
                     showLongToast("Trip Started")
                     getStatAndTrip()
+                    tripViewModel.setNewTripStatusToEmpty()
 
                 }
 
@@ -138,6 +139,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
                     (activity?.application as MatManagerUserApp).statisticsObject!!.numberTrip =+ 1
                     showLongToast("Trip ended")
                     getStatAndTrip()
+                    tripViewModel.setEndTripStatusToEmpty()
 
                 }
 

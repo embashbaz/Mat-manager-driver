@@ -10,9 +10,11 @@ import com.example.matatumanageruser.data.Trip
 import com.example.matatumanageruser.ui.expenses.ExpenseListViewModel
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class TripListViewModel @Inject constructor(val repository: MainRepository,
                                             private val dispatcher: DispatcherProvider
 ) : ViewModel() {
@@ -33,14 +35,14 @@ class TripListViewModel @Inject constructor(val repository: MainRepository,
     fun getTrips(id: String){
 
         viewModelScope.launch(dispatcher.io){
-            _tripList.value = TripListStatus.Loading
+            _tripList.postValue(TripListStatus.Loading)
             when(val response = repository.getTrips("",id,"","")){
-                is OperationStatus.Error -> _tripList.value = TripListStatus.Failed(response.message!!)
+                is OperationStatus.Error -> _tripList.postValue(TripListStatus.Failed(response.message!!))
                 is OperationStatus.Success -> {
                     if (response.data!!.isEmpty()){
-                        _tripList.value =  TripListStatus.Failed("No data was returned")
+                        _tripList.postValue(TripListStatus.Failed("No data was returned"))
                     }else{
-                        _tripList.value =  TripListStatus.Success("success", response.data)
+                        _tripList.postValue(TripListStatus.Success("success", response.data))
                     }
 
                 }
