@@ -1,5 +1,6 @@
 package com.example.matatumanageruser.ui.trip
 
+import android.location.Location
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.DialogFragment
@@ -22,8 +23,7 @@ import com.example.matatumanageruser.utils.fromJsonToPolylines
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,6 +36,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     private var stat: Statistics? = null
     private var activeTrip: Trip? = null
     private var pathPoint = mutableListOf<MutableList<LatLng>>()
+    private var locMarker: Marker? = null
 
     private var map: GoogleMap? = null
 
@@ -65,6 +66,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
 
         subscribeToObserver()
         subscribeTotrackingObserver()
+        subscribeToLocationObserver()
     }
 
     fun getStatAndTrip(){
@@ -81,6 +83,31 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
             addLatestPolyline()
             moveCameraToUser()
         })
+    }
+
+    fun subscribeToLocationObserver(){
+        TrackingService.currentLocation.observe(viewLifecycleOwner, {
+            if(it != null){
+                setLocationMarker(it)
+
+            }
+        })
+    }
+
+    private fun setLocationMarker(location: Location) {
+        val loc = LatLng(location.latitude, location.longitude)
+        if (locMarker == null){
+            val markerOptions = MarkerOptions()
+            markerOptions.position(loc)
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.final_bus))
+            markerOptions.rotation(location.bearing)
+            locMarker = map?.addMarker(markerOptions)
+        }else{
+            locMarker!!.position = loc
+            locMarker!!.rotation = location.bearing
+        }
+
+
     }
 
     fun subscribeToObserver(){

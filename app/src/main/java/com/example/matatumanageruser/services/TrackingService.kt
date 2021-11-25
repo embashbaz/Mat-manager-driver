@@ -17,13 +17,16 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.matatumanageruser.MainActivity
 import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
+import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.utils.Constant
 import com.example.matatumanageruser.utils.Constant.FASTEST_LOCATION_INTERVAL
 import com.example.matatumanageruser.utils.Constant.LOCATION_UPDATE_INTERVAL
+import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.convertToJsonArray
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -31,21 +34,33 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.model.LatLng
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
+import javax.inject.Inject
 
 
 //Most of this code were gotten form this file
 // https://github.com/philipplackner/RunningAppYT/blob/GettingLocationUpdates/app/src/main/java/com/androiddevs/runningappyt/services/TrackingService.kt
 
 
-
+@AndroidEntryPoint
 class TrackingService :  LifecycleService(){
     var serviceIsStarted = true
+
+
+    @set:Inject
+    lateinit var repository: MainRepository
+
+    @set:Inject
+    lateinit var dispatcherProvider: DispatcherProvider
+
 
     lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     companion object {
 
-        val currentLocation = MutableLiveData<LatLng>()
+        val currentLocation = MutableLiveData<Location>()
         val isTracking = MutableLiveData<Boolean>()
         val pathPoints = MutableLiveData<MutableList<MutableList<LatLng>>>()
     }
@@ -123,7 +138,7 @@ class TrackingService :  LifecycleService(){
                 result?.locations?.let { locations ->
                     for(location in locations) {
                         addPathPoint(location)
-                        currentLocation.postValue(LatLng(location.latitude, location.longitude))
+                        currentLocation.postValue(location)
 
                     }
                 }
@@ -195,12 +210,22 @@ class TrackingService :  LifecycleService(){
 
     fun updateStat(){
         var todayStat = ( application as MatManagerUserApp).statisticsObject
-        if (todayStat != null){
+        if (todayStat != null && currentLocation.value != null){
             todayStat.locationLat = currentLocation.value!!.latitude
             todayStat.locationLng = currentLocation.value!!.longitude
-            if (pathPoints.value!!.isNotEmpty())
-            todayStat.pathPoints = convertToJsonArray(pathPoints.value!!)
-            ( application as MatManagerUserApp).statisticsObject = todayStat
+            if (pathPoints.value!!.isNotEmpty()) {
+                todayStat.pathPoints = convertToJsonArray(pathPoints.value!!)
+                (application as MatManagerUserApp).statisticsObject = todayStat
+
+
+            }
+        }
+
+    }
+
+    fun updateStatInDb(stat: Statistics){
+        lifecycleScope.launch(dispatcherProvider.io){
+            repository.updateStat(stat)
         }
 
     }
