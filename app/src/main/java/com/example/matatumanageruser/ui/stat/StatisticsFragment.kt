@@ -15,7 +15,6 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
-import com.github.mikephil.charting.data.LineData
 
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import androidx.core.content.ContextCompat
@@ -25,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
 import com.example.matatumanageruser.ui.other.showLongToast
+import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.utils.Utils
 
 
@@ -49,7 +49,7 @@ class StatisticsFragment : Fragment() {
         lineChart = statisticsBinding.lineChart
         defaultRecyclerAdapter = DefaultRecyclerAdapter { stat -> onStatClicked(stat) }
 
-        setUpLineChart()
+        //setUpLineChart()
         getStats()
 
         return view
@@ -102,116 +102,73 @@ class StatisticsFragment : Fragment() {
 
     }
 
-    fun getDateArray(): ArrayList<String>{
-        var dates = ArrayList<String>()
-        for (day in allStats){
-            dates.add(day.timeStarted)
-        }
-        return dates
-
-    }
 
     private fun expenses() {
         var values = ArrayList<Entry>()
         for ((i, item) in  allStats.withIndex()){
-            values.add(Entry(item.expense.toFloat(), i.toFloat()))
+            values.add(Entry(item.expense.toFloat(), i))
         }
-        configureChart(values)
+
+        showGraph(getAllDates(), values, "Expenses")
 
     }
 
-    fun configureChart(values: ArrayList<Entry>){
 
-         val xAxis = lineChart.getXAxis()
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawAxisLine(true);
-        xAxis.setDrawGridLines(false);
-        xAxis.setDrawLabels(true);
-        xAxis.labelCount = getDateArray().size // important
-        xAxis.setSpaceMax(0.5f) // optional
-        xAxis.setSpaceMin(0.5f) // optional
-        xAxis.valueFormatter = object : ValueFormatter() {
-            override
-            fun getFormattedValue(value: Float): String {
-                // value is x as index
-                if(value.toInt() < getDateArray().size) {
-                    return getDateArray()[value.toInt()]
-                }
-                else {
-                    return getDateArray()[getDateArray().size-1]
-                }
-            }
-        }
-
-        var set1: LineDataSet?
-        if (lineChart.getData() != null &&
-            lineChart.getData().getDataSetCount() > 0
-        ) {
-            set1 = lineChart.getData().getDataSetByIndex(0) as LineDataSet?
-            set1!!.values = values
-            lineChart.getData().notifyDataChanged()
-            lineChart.notifyDataSetChanged()
-        } else {
-            set1 = LineDataSet(values, "Sample Data")
-            set1.setDrawIcons(false)
-            set1.enableDashedLine(10f, 5f, 0f)
-            set1.enableDashedHighlightLine(10f, 5f, 0f)
-            set1.color = Color.DKGRAY
-            set1.setCircleColor(Color.DKGRAY)
-            set1.lineWidth = 1f
-            set1.circleRadius = 3f
-            set1.setDrawCircleHole(false)
-            set1.valueTextSize = 9f
-            set1.setDrawFilled(true)
-            set1.formLineWidth = 1f
-            set1.formLineDashEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
-            set1.formSize = 15f
-            if (Utils.getSDKInt() >= 18) {
-                val drawable = ContextCompat.getDrawable(requireContext(), com.example.matatumanageruser.R.color.black)
-                set1.fillDrawable = drawable
-            } else {
-                set1.fillColor = Color.DKGRAY
-            }
-            val dataSets: ArrayList<ILineDataSet> = ArrayList()
-            dataSets.add(set1)
-            val data = LineData(dataSets)
-            lineChart.setData(data)
-        }
-
-
-    }
 
     private fun amountCollectedChart() {
+
+
+        var values = ArrayList<Entry>()
+        for ((i, item) in  allStats.withIndex()){
+            values.add(Entry(item.amount.toFloat(), i))
+        }
+
+        showGraph(getAllDates(), values, "Amount collected")
+
 
     }
 
     private fun distanceChart() {
+        var values = ArrayList<Entry>()
+        for ((i, item) in  allStats.withIndex()){
+            values.add(Entry(item.distance.toFloat(), i))
+        }
 
+        showGraph(getAllDates(), values, "Distance covered")
     }
 
     private fun numberTripChart() {
+        var values = ArrayList<Entry>()
+        for ((i, item) in  allStats.withIndex()){
+            values.add(Entry(item.maxSpeed.toFloat(), i))
+        }
+
+        showGraph(getAllDates(), values, "Number of trip")
+    }
+
+    private fun getAllDates(): ArrayList<String>{
+        if (allStats.isNotEmpty()){
+            val xValues = ArrayList<String>()
+            for (stat in allStats){
+                xValues.add(stat.dayId)
+            }
+            return xValues
+        }
+       else return ArrayList()
 
     }
 
-    private fun setUpLineChart(){
-        lineChart.xAxis.apply {
-            position = XAxis.XAxisPosition.BOTTOM
-            setDrawLabels(false)
-            axisLineColor = Color.WHITE
-            textColor = Color.WHITE
-            setDrawGridLines(false)
-        }
+    private fun showGraph(xValues: ArrayList<String>, lineDataset: ArrayList<Entry>, description: String){
+       val lineDataSet = LineDataSet(lineDataset, description)
+        lineDataSet.color = Color.BLUE
 
-        lineChart.axisRight.apply {
-            axisLineColor = Color.WHITE
-            textColor = Color.WHITE
-            setDrawGridLines(false)
-        }
-        lineChart.apply {
-            description.text = "Avg Speed Over Time"
-            legend.isEnabled = false
-        }
+        val data = LineData(xValues, lineDataSet)
+        lineChart.data = data
+
+        lineChart.animateXY(2000, 2000)
     }
+
+
 
     fun getStats(){
         statViewModel.getStat(driverId)

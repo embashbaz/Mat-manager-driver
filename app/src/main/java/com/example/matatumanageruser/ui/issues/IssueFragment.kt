@@ -21,7 +21,7 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     private lateinit var  defaultRecyclerAdapter: DefaultRecyclerAdapter
 
     private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
-
+    private  val adminId: String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.managerId }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -136,6 +136,7 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
 
     override fun onSaveButtonClicked(issue: Issue) {
         issue.driverId = driverId
+        issue.comment = adminId
         issueListViewModel.createNewIssue(issue)
         issueListViewModel.addIssueResult.observe(viewLifecycleOwner, {
             when(it){
