@@ -23,6 +23,7 @@ object Constant {
     const val SINGLE_BUS = "bus"
     const val DRIVER_EXPENSE = "driver_expense"
     const val DRIVER_ISSUE = "driver_issue"
+    const val DRIVER_STAT = "driver_stat"
 
     val SHOW_TRACKING_FRAGMENT = "SHOW_TRACKING_FRAGMENT"
     const val REQUEST_CODE_LOCATION_PERMISSION = 0

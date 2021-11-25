@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.databinding.FragmentStatisticsBinding
-import com.example.matatumanageruser.databinding.FragmentTripBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -21,6 +20,11 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import androidx.core.content.ContextCompat
 import android.graphics.DashPathEffect
+import android.widget.AdapterView
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.matatumanageruser.MatManagerUserApp
+import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
+import com.example.matatumanageruser.ui.other.showLongToast
 import com.github.mikephil.charting.utils.Utils
 
 
@@ -32,6 +36,8 @@ class StatisticsFragment : Fragment() {
 
     val statViewModel: StatViewModel by viewModels()
     var allStats = mutableListOf<Statistics>()
+    private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
+    private lateinit var  defaultRecyclerAdapter: DefaultRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,10 +47,16 @@ class StatisticsFragment : Fragment() {
         statisticsBinding = FragmentStatisticsBinding.inflate(inflater,container, false )
         val view = statisticsBinding.root
         lineChart = statisticsBinding.lineChart
+        defaultRecyclerAdapter = DefaultRecyclerAdapter { stat -> onStatClicked(stat) }
+
         setUpLineChart()
         getStats()
 
         return view
+    }
+
+    private fun onStatClicked(stat: Any) {
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,15 +66,38 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun getItemSelectedInSpinner() {
-        when(statisticsBinding.spinnerParameterType.selectedItemPosition){
-         0 -> numberTripChart()
-         1 -> distanceChart()
-         2 -> amountCollectedChart()
-         3 -> expenses()
+       // when(statisticsBinding.spinnerParameterType.selectedItemPosition){
+        // 0 -> numberTripChart()
+        // 1 -> distanceChart()
+         //2 -> amountCollectedChart()
+        // 3 -> expenses()
+       // }
 
+        statisticsBinding.spinnerParameterType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
 
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when(position){
+                0 -> numberTripChart()
+                1 -> distanceChart()
+                2 -> amountCollectedChart()
+                3 -> expenses()
+                }
+            }
 
         }
+
+
+        if(statisticsBinding.spinnerParameterType.selectedItemPosition == 0){
+            numberTripChart()
+        }else if(statisticsBinding.spinnerParameterType.selectedItemPosition == 1){
+            distanceChart()
+        }else if(statisticsBinding.spinnerParameterType.selectedItemPosition == 2){
+            amountCollectedChart()
+        }else
+            expenses()
 
 
     }
@@ -99,7 +134,12 @@ class StatisticsFragment : Fragment() {
             override
             fun getFormattedValue(value: Float): String {
                 // value is x as index
-                return getDateArray()[value.toInt()]
+                if(value.toInt() < getDateArray().size) {
+                    return getDateArray()[value.toInt()]
+                }
+                else {
+                    return getDateArray()[getDateArray().size-1]
+                }
             }
         }
 
@@ -161,11 +201,7 @@ class StatisticsFragment : Fragment() {
             textColor = Color.WHITE
             setDrawGridLines(false)
         }
-        lineChart.axisLeft.apply {
-            axisLineColor = Color.WHITE
-            textColor = Color.WHITE
-            setDrawGridLines(false)
-        }
+
         lineChart.axisRight.apply {
             axisLineColor = Color.WHITE
             textColor = Color.WHITE
@@ -178,17 +214,25 @@ class StatisticsFragment : Fragment() {
     }
 
     fun getStats(){
+        statViewModel.getStat(driverId)
         statViewModel.statsValues.observe(viewLifecycleOwner, {
             when(it){
                 is StatViewModel.StatStatus.Failed ->{
-
+                    showLongToast(it.errorText)
                 }
 
                 is StatViewModel.StatStatus.Success -> {
                     allStats = it.stats as MutableList<Statistics>
+                    defaultRecyclerAdapter.setData(it.stats as ArrayList<Any>)
+                    setRecyclerView()
                 }
             }
         })
+    }
+
+    fun setRecyclerView(){
+        statisticsBinding.statisticsRecyclerView.layoutManager = LinearLayoutManager(activity)
+        statisticsBinding.statisticsRecyclerView.adapter = defaultRecyclerAdapter
     }
 
 

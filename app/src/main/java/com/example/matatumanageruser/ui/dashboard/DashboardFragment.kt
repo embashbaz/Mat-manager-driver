@@ -85,7 +85,9 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
             }
         }
 
-        dashboardBinding.goToPerformanceCard.setOnClickListener {  }
+        dashboardBinding.goToPerformanceCard.setOnClickListener {
+            dashboardViewModel.statCardClicked(true)
+        }
 
         dashboardBinding.startDayCard.setOnClickListener {
             if (stat == null) {
@@ -109,13 +111,16 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                 is DashboardViewModel.StartDayStatus.Success -> {
                    showLongToast(it.resultText)
                     ( activity?.application as MatManagerUserApp).statisticsObject = it.statistics
+                    ( activity?.application as MatManagerUserApp).busObject = it.bus
                     setStat()
                     sendCommmandToTrackingService(Constant.ACTION_START_OR_RESUME_SERVICE)
                    //this.findNavController().navigate(R.id.action_dashboardFragment_to_tripFragment)
+                    dashboardViewModel.setStartDayEmpty()
                 }
 
                 is DashboardViewModel.StartDayStatus.Failed -> {
                     showLongToast(it.errorText)
+                    dashboardViewModel.setStartDayEmpty()
                 }
 
 
@@ -138,12 +143,15 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                 is DashboardViewModel.StartDayStatus.Success -> {
                     showLongToast(it.resultText)
                     ( activity?.application as MatManagerUserApp).statisticsObject = null
+                    ( activity?.application as MatManagerUserApp).busObject = null
                     sendCommmandToTrackingService(Constant.ACTION_STOP_SERVICE)
                     setStat()
+                    dashboardViewModel.setEndDayEmpty()
                 }
 
                 is DashboardViewModel.StartDayStatus.Failed -> {
                     showLongToast(it.errorText+", please try again")
+                    dashboardViewModel.setEndDayEmpty()
                 }
 
 
@@ -161,6 +169,13 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
             if (it){
                 this.findNavController().navigate(R.id.action_dashboardFragment_to_issueFragment)
                 dashboardViewModel.issueCardClicked(false)
+            }
+        })
+
+        dashboardViewModel.statCardClicked.observe(viewLifecycleOwner, {
+            if(it){
+                this.findNavController().navigate(R.id.action_dashboardFragment_to_statisticsFragment)
+                dashboardViewModel.statCardClicked(false)
             }
         })
 

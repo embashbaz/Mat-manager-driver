@@ -37,6 +37,10 @@ constructor(private var repository: MainRepository,
     val tripCardClicked: LiveData<Boolean>
         get() = _tripCardClicked
 
+    private var _statCardClicked = MutableLiveData(false)
+    val statCardClicked: LiveData<Boolean>
+        get() = _statCardClicked
+
     private var _startDayResult = MutableLiveData<StartDayStatus>(StartDayStatus.Empty)
     val startDayResult: LiveData<StartDayStatus>
         get() = _startDayResult
@@ -51,6 +55,10 @@ constructor(private var repository: MainRepository,
 
     fun issueCardClicked(action: Boolean){
         _issuesCardClicked.value = action
+    }
+
+    fun statCardClicked(action: Boolean){
+        _statCardClicked.value = action
     }
 
     fun tripCardClicked(action: Boolean){
@@ -108,8 +116,8 @@ constructor(private var repository: MainRepository,
     suspend fun updateBusToInService(bus: Bus, statistics: Statistics){
         bus.status = "in service"
         when(val response = repository.updateBus(bus)){
-            is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Success("Day was started but bus was not updated", statistics))
-            is OperationStatus.Success -> _startDayResult.postValue(StartDayStatus.Success("Day was started", statistics))
+            is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Success("Day was started but bus was not updated", statistics, bus))
+            is OperationStatus.Success -> _startDayResult.postValue(StartDayStatus.Success("Day was started", statistics, bus))
         }
     }
 
@@ -146,7 +154,7 @@ constructor(private var repository: MainRepository,
         when(val response = repository.updateStat(statistics)){
             is OperationStatus.Error -> _endDayResult.postValue(StartDayStatus.Failed(response.message!!))
             is OperationStatus.Success -> {
-                _endDayResult.postValue(StartDayStatus.Success("Day ended", null))
+                _endDayResult.postValue(StartDayStatus.Success("Day ended", null, null))
             }
         }
     }
@@ -156,7 +164,7 @@ constructor(private var repository: MainRepository,
 
 
     sealed class StartDayStatus{
-        class Success(val resultText: String, var statistics: Statistics?): StartDayStatus()
+        class Success(val resultText: String, var statistics: Statistics?, var bus: Bus?): StartDayStatus()
         class Failed(val errorText: String): StartDayStatus()
         object Loading: StartDayStatus()
         object Empty: StartDayStatus()

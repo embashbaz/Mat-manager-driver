@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.matatumanageruser.MainActivity
 import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
+import com.example.matatumanageruser.data.Bus
 import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.utils.Constant
@@ -216,7 +217,8 @@ class TrackingService :  LifecycleService(){
             if (pathPoints.value!!.isNotEmpty()) {
                 todayStat.pathPoints = convertToJsonArray(pathPoints.value!!)
                 (application as MatManagerUserApp).statisticsObject = todayStat
-
+                val bus = ( application as MatManagerUserApp).busObject
+                updateBusInDb(bus!!)
 
             }
         }
@@ -225,8 +227,16 @@ class TrackingService :  LifecycleService(){
 
     fun updateStatInDb(stat: Statistics){
         lifecycleScope.launch(dispatcherProvider.io){
-            repository.updateStat(stat)
+           // repository.updateStat(stat)
         }
 
+    }
+
+    fun updateBusInDb(bus: Bus){
+        lifecycleScope.launch(dispatcherProvider.io){
+            bus.locationLat = currentLocation.value!!.latitude
+            bus.locationLng = currentLocation.value!!.longitude
+            repository.updateBus(bus)
+        }
     }
 }
