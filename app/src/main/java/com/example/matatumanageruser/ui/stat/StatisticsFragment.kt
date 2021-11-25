@@ -142,15 +142,15 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun amountCollectedChart() {
-        TODO("Not yet implemented")
+
     }
 
     private fun distanceChart() {
-        TODO("Not yet implemented")
+
     }
 
     private fun numberTripChart() {
-        TODO("Not yet implemented")
+
     }
 
     private fun setUpLineChart(){
