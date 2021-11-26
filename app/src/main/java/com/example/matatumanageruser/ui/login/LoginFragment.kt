@@ -10,12 +10,13 @@ import androidx.navigation.fragment.findNavController
 import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentLoginBinding
+import com.example.matatumanageruser.ui.dialogs.NoticeDialogFragment
 import com.example.matatumanageruser.ui.other.showLongToast
 import com.example.matatumanageruser.ui.other.stringFromTl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener {
 
     private lateinit var loginBinding: FragmentLoginBinding
     private val loginViewModel : LoginViewModel by viewModels()
@@ -47,7 +48,7 @@ class LoginFragment : Fragment() {
         loginViewModel.loginStatus.observe(viewLifecycleOwner, {
             when(it){
                 is LoginViewModel.LoginStatus.Failed -> {
-                    showLongToast(it.errorText)
+                    openNoticeDialog("ok", it.errorText)
                     hideProgressBar()
                 }
                 is LoginViewModel.LoginStatus.Success -> {
@@ -72,5 +73,12 @@ class LoginFragment : Fragment() {
 
     fun moveToDashboard(){
         this.findNavController().navigate(R.id.action_loginFragment_to_dashboardFragment)
+    }
+
+    fun openNoticeDialog(positiveButton: String,  message: String){
+        val dialog = NoticeDialogFragment(positiveButton, message)
+        dialog.setListener(this)
+        dialog.show(parentFragmentManager, "Confirm you want to save picture")
+
     }
 }

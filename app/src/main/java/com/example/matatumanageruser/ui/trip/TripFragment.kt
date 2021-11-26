@@ -191,11 +191,13 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.trip_menu, menu)
-        if (activeTrip != null){
-            menu.getItem(R.id.new_trip_loc).title = "End trip"
-        }
+        //
+        //    menu.getItem(R.id.new_trip_loc).title = "End trip"
+        //}
 
     }
+
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.new_trip_loc){
