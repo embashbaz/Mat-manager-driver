@@ -21,6 +21,10 @@ class LoginViewModel @Inject constructor(val repository: MainRepository,
     val loginStatus: LiveData<LoginStatus>
         get() = _loginStatus
 
+    private var _resetPasswordStatus = MutableLiveData<LoginStatus>(LoginStatus.Empty)
+    val resetPasswordStatus: LiveData<LoginStatus>
+        get() = _resetPasswordStatus
+
     fun setLoginStatusToEmpty(){
         _loginStatus.postValue(LoginStatus.Empty)
     }
@@ -36,6 +40,23 @@ class LoginViewModel @Inject constructor(val repository: MainRepository,
 
         }else{
             _loginStatus.value = LoginStatus.Failed("Please give both the password and email")
+        }
+
+    }
+
+    fun resetPassword(email: String){
+        if (email.isNotEmpty()){
+            viewModelScope.launch(dispatcher.io) {
+                _resetPasswordStatus.postValue(LoginStatus.Loading)
+                when(val response = repository.resetPassword(email)){
+                    is OperationStatus.Success -> _resetPasswordStatus.postValue(LoginStatus.Success("email sent", null))
+                    is OperationStatus.Error -> _resetPasswordStatus.postValue(LoginStatus.Failed(response.message!!))
+
+                }
+
+            }
+        }else{
+            _resetPasswordStatus.value = LoginStatus.Failed("email can not be null")
         }
 
     }

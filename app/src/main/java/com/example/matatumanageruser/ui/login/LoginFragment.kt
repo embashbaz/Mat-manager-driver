@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.matatumanageradmin.ui.resetPassword.ResetPasswordDialog
 import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.databinding.FragmentLoginBinding
@@ -16,7 +17,8 @@ import com.example.matatumanageruser.ui.other.stringFromTl
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener {
+class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
+    ResetPasswordDialog.ResetPasswordDialogListener {
 
     private lateinit var loginBinding: FragmentLoginBinding
     private val loginViewModel : LoginViewModel by viewModels()
@@ -31,6 +33,8 @@ class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener {
 
         login()
         observeLoginStatus()
+        onResetPasswordClicked()
+        obsevePasswordReset()
 
         return view
     }
@@ -81,5 +85,43 @@ class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener {
         dialog.setListener(this)
         dialog.show(parentFragmentManager, "Error")
 
+    }
+
+
+    private fun obsevePasswordReset() {
+        loginViewModel.resetPasswordStatus.observe(viewLifecycleOwner, {
+            when(it){
+                is LoginViewModel.LoginStatus.Failed -> {
+                    hideProgressBar()
+                    openNoticeDialog("ok", it.errorText)
+                }
+                is LoginViewModel.LoginStatus.Success -> {
+                    hideProgressBar()
+                    openNoticeDialog("ok", it.resultText)
+
+                }
+
+                is LoginViewModel.LoginStatus.Loading -> {
+                    showProgressBar()
+                }
+            }
+        })
+    }
+
+    private fun onResetPasswordClicked() {
+        loginBinding.forgotPassword.setOnClickListener {
+            openResetPasswordDialog()
+        }
+    }
+
+    fun openResetPasswordDialog(){
+        val dialog = ResetPasswordDialog()
+        dialog.setListener(this)
+        dialog.show(parentFragmentManager, "Reset Password")
+
+    }
+
+    override fun onSaveButtonClicked(email: String) {
+        loginViewModel.resetPassword(email)
     }
 }
