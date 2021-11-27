@@ -21,6 +21,7 @@
         <entry key="app/src/main/res/layout/location_search_dialog.xml" value="0.15489130434782608" />
         <entry key="app/src/main/res/layout/start_day_dialog.xml" value="0.240625" />
         <entry key="app/src/main/res/layout/trip_details.xml" value="0.15217391304347827" />
+        <entry key="app/src/main/res/menu/dashboard_menu.xml" value="0.1" />
         <entry key="app/src/main/res/menu/expense_list_menu.xml" value="0.11666666666666667" />
         <entry key="app/src/main/res/menu/issue_list_menu.xml" value="0.1287037037037037" />
         <entry key="app/src/main/res/menu/trip_menu.xml" value="0.17962962962962964" />

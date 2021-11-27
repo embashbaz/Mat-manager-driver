@@ -4,10 +4,8 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -41,6 +39,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         dashboardBinding = FragmentDashboardBinding.inflate(inflater, container, false)
         val view = dashboardBinding.root
 
@@ -49,10 +48,24 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
 
         observeDayCreated()
         observeDayEnded()
+        observeLogOut()
 
 
         return view
 
+    }
+
+    private fun observeLogOut() {
+        dashboardViewModel.logOutStatus.observe(viewLifecycleOwner, {
+            when(it){
+                is DashboardViewModel.StartDayStatus.Failed -> showLongToast(it.errorText)
+                is DashboardViewModel.StartDayStatus.Success -> {
+                    ( activity?.application as MatManagerUserApp).driverObject = null
+                    this.findNavController().navigateUp()
+                    dashboardViewModel.setLogoutStatusToEmpty()
+                }
+            }
+        })
     }
 
     override fun onStart() {
@@ -263,6 +276,27 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         if(stat!= null){
             dashboardViewModel.endDayRequest(stat!!)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.dashboard_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.log_out_menu){
+          if (stat == null){
+              dashboardViewModel.logOut()
+          }else{
+              showLongToast("You can not log out while you have an active day")
+          }
+
+          //  openNoticeDialog("Yes", "Are you sure you want to logout")
+        }
+
+
+
+        return super.onOptionsItemSelected(item)
     }
 }
 

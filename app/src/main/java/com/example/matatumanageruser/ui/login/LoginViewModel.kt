@@ -21,6 +21,10 @@ class LoginViewModel @Inject constructor(val repository: MainRepository,
     val loginStatus: LiveData<LoginStatus>
         get() = _loginStatus
 
+    fun setLoginStatusToEmpty(){
+        _loginStatus.postValue(LoginStatus.Empty)
+    }
+
     fun loginMethod(email: String, password: String){
         if (email.isNotEmpty() && password.isNotEmpty())
         viewModelScope.launch(dispatcher.io) {

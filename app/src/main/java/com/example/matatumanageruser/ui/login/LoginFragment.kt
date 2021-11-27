@@ -55,6 +55,7 @@ class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener {
                     (activity?.application as MatManagerUserApp).driverObject = it.driver
                     moveToDashboard()
                     hideProgressBar()
+                    loginViewModel.setLoginStatusToEmpty()
                 }
                 is LoginViewModel.LoginStatus.Loading -> {
                     showProgressBar()
@@ -78,7 +79,7 @@ class LoginFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener {
     fun openNoticeDialog(positiveButton: String,  message: String){
         val dialog = NoticeDialogFragment(positiveButton, message)
         dialog.setListener(this)
-        dialog.show(parentFragmentManager, "Confirm you want to save picture")
+        dialog.show(parentFragmentManager, "Error")
 
     }
 }

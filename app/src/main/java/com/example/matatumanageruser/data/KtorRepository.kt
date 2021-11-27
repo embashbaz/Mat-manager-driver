@@ -34,6 +34,26 @@ class KtorRepository  @Inject constructor(
         }
     }
 
+    override suspend fun resetPassword(email: String): OperationStatus<String> {
+        return try {
+            mAuth.sendPasswordResetEmail(email).await()
+            return OperationStatus.Success("Reset email sent")
+
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
+
+    }
+
+    override suspend fun logOut(): OperationStatus<String> {
+        return try {
+            mAuth.signOut()
+            return OperationStatus.Success("Logged out")
+        }catch (e: Exception){
+            OperationStatus.Error(e.message ?: "An error occurred")
+        }
+    }
+
     override suspend fun getBus(plate: String): OperationStatus<Bus> {
         return  try{
             val response = api.getBus(Constant.SINGLE_BUS, plate, "a")

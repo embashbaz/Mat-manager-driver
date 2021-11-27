@@ -49,6 +49,10 @@ constructor(private var repository: MainRepository,
     val endDayResult: LiveData<StartDayStatus>
         get() = _endDayResult
 
+    private var _logOutStatus = MutableLiveData<StartDayStatus>(StartDayStatus.Empty)
+    val logOutStatus : LiveData<StartDayStatus>
+        get() = _logOutStatus
+
     fun expenseCardClicked(action: Boolean){
         _expenseCardClicked.value = action
     }
@@ -75,6 +79,10 @@ constructor(private var repository: MainRepository,
 
     fun setEndDayEmpty(){
         _endDayResult.value = StartDayStatus.Empty
+    }
+
+    fun setLogoutStatusToEmpty(){
+        _logOutStatus.value = StartDayStatus.Empty
     }
 
     fun startDayRequest(plate: String, driverId: String) {
@@ -160,6 +168,19 @@ constructor(private var repository: MainRepository,
     }
 
 
+    fun logOut(){
+        viewModelScope.launch(dispatcher.io){
+            _logOutStatus.postValue(StartDayStatus.Loading)
+            when(val response = repository.logOut()){
+                is OperationStatus.Success -> _logOutStatus.postValue(StartDayStatus.Success("Signed out", null, null))
+                is OperationStatus.Error -> _logOutStatus.postValue(StartDayStatus.Failed(response.message!!))
+            }
+
+
+        }
+
+
+    }
 
 
 
