@@ -7,4 +7,9 @@
         android:title="Logout"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/driver_profile_menu"
+        android:title="Profile"
+        app:showAsAction="never" />
+
 </menu>

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.matatumanageruser.MatManagerUserApp
 import com.example.matatumanageruser.R
 import com.example.matatumanageruser.data.Driver
 import com.example.matatumanageruser.databinding.FragmentDriverDetailBinding
@@ -25,6 +26,8 @@ class DriverDetailFragment : Fragment() {
     ): View? {
         driverDetailBinding = FragmentDriverDetailBinding.inflate(inflater, container, false)
         val view = driverDetailBinding.root
+        val driverObject = (activity?.application as MatManagerUserApp).driverObject!!
+        driverDetailViewModel.setDriver(driverObject)
 
         driverDetailViewModel.driverObject.observe(viewLifecycleOwner, {
             if (it != null) {
@@ -60,6 +63,8 @@ class DriverDetailFragment : Fragment() {
         driverDetailBinding.addressDriverTl.isEnabled = false
         driverDetailBinding.permitDriverTl.isEnabled = false
         driverDetailBinding.idNumberDriverTl.isEnabled = false
+        driverDetailBinding.passwordRegisterDriverTl.isEnabled = false
+        driverDetailBinding.confirmPasswordDriverTl.isEnabled = false
         driverDetailBinding.registerDriverButton.visibility = View.INVISIBLE
     }
 

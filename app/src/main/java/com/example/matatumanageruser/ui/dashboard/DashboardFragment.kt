@@ -205,6 +205,13 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
             dashboardViewModel.tripCardClicked(false)
             }
         })
+
+        dashboardViewModel.profileCardClicked.observe(viewLifecycleOwner, {
+            if(it){
+                this.findNavController().navigate(R.id.action_dashboardFragment_to_driverDetailFragment)
+                dashboardViewModel.profileCardClicked(false)
+            }
+        })
     }
 
     fun openStartDayDialog(){
@@ -292,6 +299,9 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
           }
 
           //  openNoticeDialog("Yes", "Are you sure you want to logout")
+        }
+        else if (item.itemId == R.id.driver_profile_menu){
+            dashboardViewModel.profileCardClicked(true)
         }
 
 
