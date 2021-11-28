@@ -48,8 +48,12 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
     private fun newExpense() {
         expenseListViewModel.newExpenseAction.observe(viewLifecycleOwner, {
             if(it) {
-                openExpenseDetailDialog(false, null)
-                expenseListViewModel.setNextActionNewExpense(false)
+                if(( activity?.application as MatManagerUserApp).statisticsObject != null) {
+                    openExpenseDetailDialog(false, null)
+                    expenseListViewModel.setNextActionNewExpense(false)
+                }else{
+                    showLongToast("You can not create an expense unless you have an active day")
+                }
             }
 
         })
@@ -149,6 +153,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
             when(it){
                 is ExpenseListViewModel.ExpenseStatus.Success-> {
                     showLongToast("Expense Added")
+                    ( activity?.application as MatManagerUserApp).statisticsObject!!.expense =+ expense.amount
                    getExpenses()
                 }
 

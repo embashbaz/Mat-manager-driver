@@ -137,7 +137,8 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     override fun onSaveButtonClicked(issue: Issue) {
         issue.driverId = driverId
         issue.comment = adminId
-        issueListViewModel.createNewIssue(issue)
+
+
         issueListViewModel.addIssueResult.observe(viewLifecycleOwner, {
             when(it){
                 is IssuesViewModel.IssueStatus.Success -> {
