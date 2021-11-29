@@ -135,8 +135,8 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
                 }
 
                 is TripViewModel.TripStatus.Success -> {
-                    ( activity?.application as MatManagerUserApp).statisticsObject?.amount =+ activeTrip!!.moneyCollected
-                    (activity?.application as MatManagerUserApp).statisticsObject!!.numberTrip =+ 1
+                    ( activity?.application as MatManagerUserApp).statisticsObject!!.amount += activeTrip!!.moneyCollected
+                    (activity?.application as MatManagerUserApp).statisticsObject!!.maxSpeed += 1.0
                     showLongToast("Trip ended")
                     (activity?.application as MatManagerUserApp).activeTrip = null
                     getStatAndTrip()

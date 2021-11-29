@@ -170,7 +170,7 @@ class KtorRepository  @Inject constructor(
         return  try{
             val response = api.updateTrip(trip)
             val result = response.body()
-            if(response.isSuccessful && result != null && result.has("true")){
+            if(response.isSuccessful && result != null && result.toString().contains("true")){
                 OperationStatus.Success(result.toString())
             }else{
                 OperationStatus.Error(response.message())
