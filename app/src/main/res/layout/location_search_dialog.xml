@@ -13,7 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:visibility="visible"
-    >
+    app:layout_behavior=".ui.other.TopSheetBehavior" >
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/first_location_search"

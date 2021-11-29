@@ -8,7 +8,9 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,36 +33,34 @@ class LocationSearchDialog : DialogFragment(){
     lateinit var locationSearchDialogBinding: LocationSearchDialogBinding
     internal lateinit var listener :LocationSearchListener
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
 
-            val inflater = requireActivity().layoutInflater;
-            locationSearchDialogBinding = LocationSearchDialogBinding.inflate(inflater)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        locationSearchDialogBinding = LocationSearchDialogBinding.inflate(inflater, container, false)
 
-            val view = locationSearchDialogBinding.root
-            builder.setView(view)
+        val view = locationSearchDialogBinding.root
 
-            locationSearchDialogBinding.addPlacesToTrip.setOnClickListener {
-                if (stringFromTl(locationSearchDialogBinding.firstLocationSearch).isNotEmpty() && stringFromTl(locationSearchDialogBinding.secondLocationSearch).isNotEmpty()) {
-                    listener.onSearchLocation(
-                        stringFromTl(locationSearchDialogBinding.firstLocationSearch),
-                        stringFromTl(locationSearchDialogBinding.secondLocationSearch)
-                    )
-                    dialog?.dismiss()
-                }
-                else
-                    showLongToast("Both locations must be given")
+
+        locationSearchDialogBinding.addPlacesToTrip.setOnClickListener {
+            if (stringFromTl(locationSearchDialogBinding.firstLocationSearch).isNotEmpty() && stringFromTl(locationSearchDialogBinding.secondLocationSearch).isNotEmpty()) {
+                listener.onSearchLocation(
+                    stringFromTl(locationSearchDialogBinding.firstLocationSearch),
+                    stringFromTl(locationSearchDialogBinding.secondLocationSearch)
+                )
+                dialog?.dismiss()
             }
+            else
+                showLongToast("Both locations must be given")
+        }
 
 
-
-            builder.create()
-
-        }?: throw IllegalStateException("Activity cannot be null")
-
-
+        return view
     }
+
+    
 
     interface LocationSearchListener{
         fun onSearchLocation(firstText: String, secondText: String)

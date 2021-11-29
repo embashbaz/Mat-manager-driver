@@ -4,11 +4,14 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import com.example.matatumanageruser.data.Trip
 import com.example.matatumanageruser.databinding.TripDetailsBinding
 import com.example.matatumanageruser.ui.other.showLongToast
 import com.example.matatumanageruser.ui.other.stringFromTl
-import com.example.matatumanageruser.ui.trip.TripViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class TripDetailBottomSheet(var trip: Trip): BottomSheetDialogFragment() {
@@ -16,29 +19,28 @@ class TripDetailBottomSheet(var trip: Trip): BottomSheetDialogFragment() {
     lateinit var tripDetailDialogBinding: TripDetailsBinding
     internal lateinit var listener: TripDetailBtSheetListener
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val builder = AlertDialog.Builder(it)
-            val inflater = requireActivity().layoutInflater;
-            tripDetailDialogBinding = TripDetailsBinding.inflate(inflater)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-            val view = tripDetailDialogBinding.root
-            builder.setView(view)
-
-            tripDetailDialogBinding.locationsTripDetailTxt.setText(trip.pickupPoint)
-            if (trip.tripStatus == "started"){
-                endTrip()
-            }else{
-                startTrip()
-            }
+        tripDetailDialogBinding = TripDetailsBinding.inflate(inflater, container, false)
+        val view = tripDetailDialogBinding.root
 
 
-            builder.create()
+        tripDetailDialogBinding.locationsTripDetailTxt.setText(trip.pickupPoint)
+        if (trip.tripStatus == "started"){
+            endTrip()
+        }else{
+            startTrip()
+        }
 
-        }?: throw IllegalStateException("Activity cannot be null")
 
-
+        return view
     }
+
+
 
     private fun startTrip() {
         tripDetailDialogBinding.startTripBt.setOnClickListener {
@@ -46,6 +48,7 @@ class TripDetailBottomSheet(var trip: Trip): BottomSheetDialogFragment() {
             //yes this doesn't make sense, i just want to pass this data
             trip.date = stringFromTl(tripDetailDialogBinding.amountTl)
             listener.onStartTripClicked(trip, true)
+            dialog?.dismiss()
 
         }
     }

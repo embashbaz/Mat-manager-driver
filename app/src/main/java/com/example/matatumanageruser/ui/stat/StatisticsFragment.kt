@@ -36,15 +36,15 @@ class StatisticsFragment : Fragment() {
 
     val statViewModel: StatViewModel by viewModels()
     var allStats = mutableListOf<Statistics>()
-    private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
-    private lateinit var  defaultRecyclerAdapter: DefaultRecyclerAdapter
+    private val driverId: String by lazy { (activity?.application as MatManagerUserApp).driverObject!!.driverId }
+    private lateinit var defaultRecyclerAdapter: DefaultRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        statisticsBinding = FragmentStatisticsBinding.inflate(inflater,container, false )
+        statisticsBinding = FragmentStatisticsBinding.inflate(inflater, container, false)
         val view = statisticsBinding.root
         lineChart = statisticsBinding.lineChart
         defaultRecyclerAdapter = DefaultRecyclerAdapter { stat -> onStatClicked(stat) }
@@ -66,37 +66,43 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun getItemSelectedInSpinner() {
-       // when(statisticsBinding.spinnerParameterType.selectedItemPosition){
+        // when(statisticsBinding.spinnerParameterType.selectedItemPosition){
         // 0 -> numberTripChart()
         // 1 -> distanceChart()
-         //2 -> amountCollectedChart()
+        //2 -> amountCollectedChart()
         // 3 -> expenses()
-       // }
+        // }
 
-        statisticsBinding.spinnerParameterType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
+        statisticsBinding.spinnerParameterType.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
 
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when(position){
-                0 -> numberTripChart()
-                1 -> distanceChart()
-                2 -> amountCollectedChart()
-                3 -> expenses()
                 }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    when (position) {
+                        0 -> numberTripChart()
+                        1 -> distanceChart()
+                        2 -> amountCollectedChart()
+                        3 -> expenses()
+                    }
+                }
+
             }
 
-        }
 
-
-        if(statisticsBinding.spinnerParameterType.selectedItemPosition == 0){
+        if (statisticsBinding.spinnerParameterType.selectedItemPosition == 0) {
             numberTripChart()
-        }else if(statisticsBinding.spinnerParameterType.selectedItemPosition == 1){
+        } else if (statisticsBinding.spinnerParameterType.selectedItemPosition == 1) {
             distanceChart()
-        }else if(statisticsBinding.spinnerParameterType.selectedItemPosition == 2){
+        } else if (statisticsBinding.spinnerParameterType.selectedItemPosition == 2) {
             amountCollectedChart()
-        }else
+        } else
             expenses()
 
 
@@ -105,7 +111,7 @@ class StatisticsFragment : Fragment() {
 
     private fun expenses() {
         var values = ArrayList<Entry>()
-        for ((i, item) in  allStats.withIndex()){
+        for ((i, item) in allStats.withIndex()) {
             values.add(Entry(item.expense.toFloat(), i))
         }
 
@@ -114,12 +120,11 @@ class StatisticsFragment : Fragment() {
     }
 
 
-
     private fun amountCollectedChart() {
 
 
         var values = ArrayList<Entry>()
-        for ((i, item) in  allStats.withIndex()){
+        for ((i, item) in allStats.withIndex()) {
             values.add(Entry(item.amount.toFloat(), i))
         }
 
@@ -130,7 +135,7 @@ class StatisticsFragment : Fragment() {
 
     private fun distanceChart() {
         var values = ArrayList<Entry>()
-        for ((i, item) in  allStats.withIndex()){
+        for ((i, item) in allStats.withIndex()) {
             values.add(Entry(item.distance.toFloat(), i))
         }
 
@@ -139,27 +144,30 @@ class StatisticsFragment : Fragment() {
 
     private fun numberTripChart() {
         var values = ArrayList<Entry>()
-        for ((i, item) in  allStats.withIndex()){
+        for ((i, item) in allStats.withIndex()) {
             values.add(Entry(item.maxSpeed.toFloat(), i))
         }
 
         showGraph(getAllDates(), values, "Number of trip")
     }
 
-    private fun getAllDates(): ArrayList<String>{
-        if (allStats.isNotEmpty()){
+    private fun getAllDates(): ArrayList<String> {
+        if (allStats.isNotEmpty()) {
             val xValues = ArrayList<String>()
-            for (stat in allStats){
+            for (stat in allStats) {
                 xValues.add(stat.dayId)
             }
             return xValues
-        }
-       else return ArrayList()
+        } else return ArrayList()
 
     }
 
-    private fun showGraph(xValues: ArrayList<String>, lineDataset: ArrayList<Entry>, description: String){
-       val lineDataSet = LineDataSet(lineDataset, description)
+    private fun showGraph(
+        xValues: ArrayList<String>,
+        lineDataset: ArrayList<Entry>,
+        description: String
+    ) {
+        val lineDataSet = LineDataSet(lineDataset, description)
         lineDataSet.color = Color.BLUE
 
         val data = LineData(xValues, lineDataSet)
@@ -169,12 +177,11 @@ class StatisticsFragment : Fragment() {
     }
 
 
-
-    fun getStats(){
+    fun getStats() {
         statViewModel.getStat(driverId)
         statViewModel.statsValues.observe(viewLifecycleOwner, {
-            when(it){
-                is StatViewModel.StatStatus.Failed ->{
+            when (it) {
+                is StatViewModel.StatStatus.Failed -> {
                     showLongToast(it.errorText)
                 }
 
@@ -187,7 +194,7 @@ class StatisticsFragment : Fragment() {
         })
     }
 
-    fun setRecyclerView(){
+    fun setRecyclerView() {
         statisticsBinding.statisticsRecyclerView.layoutManager = LinearLayoutManager(activity)
         statisticsBinding.statisticsRecyclerView.adapter = defaultRecyclerAdapter
     }

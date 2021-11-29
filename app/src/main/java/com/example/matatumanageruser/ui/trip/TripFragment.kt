@@ -28,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
-                LocationSearchDialog.LocationSearchListener, TripDetailBottomSheet.TripDetailBtSheetListener{
+    LocationSearchDialog.LocationSearchListener, TripDetailBottomSheet.TripDetailBtSheetListener {
 
     lateinit var tripBinding: FragmentTripBinding
     lateinit var mapView: MapView
@@ -45,11 +45,12 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
         savedInstanceState: Bundle?
     ): View? {
         setHasOptionsMenu(true)
-       tripBinding = FragmentTripBinding.inflate(inflater,container, false )
+        tripBinding = FragmentTripBinding.inflate(inflater, container, false)
         mapView = tripBinding.projectMapView
         val view = tripBinding.root
 
-       getStatAndTrip()
+
+        getStatAndTrip()
 
         return view
     }
@@ -69,15 +70,15 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
         subscribeToLocationObserver()
     }
 
-    fun getStatAndTrip(){
+    fun getStatAndTrip() {
         stat = (activity?.application as MatManagerUserApp).statisticsObject
         //if (stat!=null){
-           // pathPoint = fromJsonToPolylines(stat!!.pathPoints)
-       // }
+        // pathPoint = fromJsonToPolylines(stat!!.pathPoints)
+        // }
         activeTrip = (activity?.application as MatManagerUserApp).activeTrip
     }
 
-    fun subscribeTotrackingObserver(){
+    fun subscribeTotrackingObserver() {
         TrackingService.pathPoints.observe(viewLifecycleOwner, {
             pathPoint = it
             addLatestPolyline()
@@ -85,9 +86,9 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
         })
     }
 
-    fun subscribeToLocationObserver(){
+    fun subscribeToLocationObserver() {
         TrackingService.currentLocation.observe(viewLifecycleOwner, {
-            if(it != null){
+            if (it != null) {
                 setLocationMarker(it)
 
             }
@@ -95,27 +96,32 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     }
 
     private fun setLocationMarker(location: Location) {
+       // locMarker = null
         val loc = LatLng(location.latitude, location.longitude)
-        if (locMarker == null){
+        if (locMarker == null) {
             val markerOptions = MarkerOptions()
             markerOptions.position(loc)
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.final_bus))
             markerOptions.rotation(location.bearing)
             locMarker = map?.addMarker(markerOptions)
-        }else{
+           // locMarker!!.remove()
+       }
+        else {
             locMarker!!.position = loc
             locMarker!!.rotation = location.bearing
+
+           //locMarker!!.setIcon(BitmapDescriptorFactory.fromResource(R.mipmap.final_bus))
         }
 
 
     }
 
-    fun subscribeToObserver(){
+    fun subscribeToObserver() {
         tripViewModel.createNewTrip.observe(viewLifecycleOwner, {
-            when(it){
-                 is TripViewModel.TripStatus.Failed -> {
-                     showLongToast(it.errorText)
-                 }
+            when (it) {
+                is TripViewModel.TripStatus.Failed -> {
+                    showLongToast(it.errorText)
+                }
 
                 is TripViewModel.TripStatus.Success -> {
                     (activity?.application as MatManagerUserApp).activeTrip = it.trip
@@ -129,13 +135,13 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
         })
 
         tripViewModel.updateTrip.observe(viewLifecycleOwner, {
-            when(it){
+            when (it) {
                 is TripViewModel.TripStatus.Failed -> {
                     showLongToast(it.errorText)
                 }
 
                 is TripViewModel.TripStatus.Success -> {
-                    ( activity?.application as MatManagerUserApp).statisticsObject!!.amount += activeTrip!!.moneyCollected
+                    (activity?.application as MatManagerUserApp).statisticsObject!!.amount += activeTrip!!.moneyCollected
                     (activity?.application as MatManagerUserApp).statisticsObject!!.maxSpeed += 1.0
                     showLongToast("Trip ended")
                     (activity?.application as MatManagerUserApp).activeTrip = null
@@ -152,7 +158,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     }
 
     private fun moveCameraToUser() {
-        if(pathPoint.isNotEmpty() && pathPoint.last().isNotEmpty()) {
+        if (pathPoint.isNotEmpty() && pathPoint.last().isNotEmpty()) {
             map?.animateCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     pathPoint.last().last(),
@@ -163,7 +169,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     }
 
     private fun addAllPolylines() {
-        for(polyline in pathPoint) {
+        for (polyline in pathPoint) {
             val polylineOptions = PolylineOptions()
                 .color(Constant.POLYLINE_COLOR)
                 .width(Constant.POLYLINE_WIDTH)
@@ -173,7 +179,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     }
 
     private fun addLatestPolyline() {
-        if(pathPoint.isNotEmpty() && pathPoint.last().size > 1) {
+        if (pathPoint.isNotEmpty() && pathPoint.last().size > 1) {
             val preLastLatLng = pathPoint.last()[pathPoint.last().size - 2]
             val lastLatLng = pathPoint.last().last()
             val polylineOptions = PolylineOptions()
@@ -199,20 +205,22 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     }
 
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.new_trip_loc){
-            if(activeTrip == null){
-                if (stat == null){
-                    openNoticeDialog("Ok","You can not create a trip unless you have started a day")
-                }else{
+        if (item.itemId == R.id.new_trip_loc) {
+            if (activeTrip == null) {
+                if (stat == null) {
+                    openNoticeDialog(
+                        "Ok",
+                        "You can not create a trip unless you have started a day"
+                    )
+                } else {
                     openLocationDataText()
                 }
 
-            }else{
+            } else {
                 openTripDetail(activeTrip!!)
             }
-        }else if (item.itemId == R.id.trip_list_menu){
+        } else if (item.itemId == R.id.trip_list_menu) {
             this.findNavController().navigate(R.id.action_tripFragment_to_tripListFragment)
 
         }
@@ -220,34 +228,34 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
         return super.onOptionsItemSelected(item)
     }
 
-    fun openNoticeDialog(positiveButton: String,  message: String){
+    fun openNoticeDialog(positiveButton: String, message: String) {
         val dialog = NoticeDialogFragment(positiveButton, message)
         dialog.setListener(this)
         dialog.show(parentFragmentManager, "Day has not started yet")
 
     }
 
-    fun openLocationDataText(){
+    fun openLocationDataText() {
         val dialog = LocationSearchDialog()
         dialog.setLocListen(this)
         dialog.show(parentFragmentManager, "From where to")
     }
 
-    fun openTripDetail(trip: Trip){
+    fun openTripDetail(trip: Trip) {
         val dialog = TripDetailBottomSheet(trip)
         dialog.setListener(this)
         dialog.show(parentFragmentManager, "Trip")
     }
 
     override fun onSearchLocation(firstText: String, secondText: String) {
-        val trip = Trip(pickupPoint =firstText+" / "+secondText )
+        val trip = Trip(pickupPoint = firstText + " / " + secondText)
         openTripDetail(trip)
     }
 
     override fun onStartTripClicked(trip: Trip, nextAction: Boolean) {
-        if (nextAction){
+        if (nextAction) {
             tripViewModel.createTrip(trip.pickupPoint, trip.date, stat!!.busPlate, stat!!.driverId)
-        }else{
+        } else {
             tripViewModel.updateTrip(trip)
         }
     }
@@ -256,6 +264,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
     override fun onStart() {
         super.onStart()
         mapView?.onStart()
+
     }
 
     override fun onStop() {

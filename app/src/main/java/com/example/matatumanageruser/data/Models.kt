@@ -1,5 +1,8 @@
 package com.example.matatumanageruser.data
 
+import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -17,8 +20,7 @@ data class MatAdmin(
     var dateCreated: String = ""
 
     )
-
-@Serializable
+@Parcelize
 data class Driver(
     var driverId: String = "",
     var managerId: String = "",
@@ -34,22 +36,25 @@ data class Driver(
     var comment: String = "",
     val dateCreated: String = ""
 
-)
+): Parcelable
 
-@Serializable
+@Parcelize
 data class Bus(
-    var plate: String = "",
-    var managerId: String = "",
-    var identifier: String = "",
-    var carModel : String = "",
-    var pathPoints: String = "",
-    var locationLat: Double = 0.0,
-    var locationLng: Double = 0.0,
-    var status: String = "",
-    var comment: String = "",
-    var dateCreated: String = ""
+    @SerializedName("plate") var plate: String = "",
+    @SerializedName("managerId") var managerId: String = "",
+    @SerializedName("identifier") var identifier: String = "",
+    @SerializedName("carModel")  var carModel : String = "",
+    @SerializedName("docLink") var docLink: String = "",
+    @SerializedName("pickupPoint") var pickupPoint: String = "",
+    @SerializedName("picture") var picture: String = "",
+    @SerializedName("pathPoints")var pathPoints: String = "",
+    @SerializedName("locationLat") var locationLat: Double = 0.0,
+    @SerializedName("locationLng")var locationLng: Double = 0.0,
+    @SerializedName("status") var status: String = "",
+    @SerializedName("comment") var comment: String = "",
+    @SerializedName("dateCreated") var dateCreated: String = "",
 
-)
+    ): Parcelable
 
 @Serializable
 data class Trip(
