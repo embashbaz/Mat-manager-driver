@@ -27,6 +27,9 @@ interface MatManagerApi {
     @POST(UPDATE_BUSES)
     suspend fun updateBus(@Body bus: Bus): Response<JsonObject>
 
+    @POST(UPDATE_DRIVERS)
+    suspend fun updateDriver(@Body driver: Driver): Response<JsonObject>
+
     @POST(UPDATE_TRIPS)
     suspend fun updateTrip(@Body trip: Trip): Response<JsonObject>
 

@@ -15,6 +15,9 @@ const val CREATE_TRIPS = "$TRIPS/create"
 const val CREATE_STATS = "$STATS/create"
 const val CREATE_EXPENSES = "$EXPENSES/create"
 const val UPDATE_BUSES = "$BUSES/update"
+
+const val UPDATE_DRIVERS = "$DRIVERS/update"
+
 const val UPDATE_TRIPS = "$TRIPS/update"
 const val UPDATE_STATS = "$STATS/update"
 
