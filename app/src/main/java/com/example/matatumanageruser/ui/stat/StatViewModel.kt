@@ -8,6 +8,8 @@ import com.example.matatumanageruser.data.Expense
 import com.example.matatumanageruser.data.MainRepository
 import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.ui.expenses.ExpenseListViewModel
+import com.example.matatumanageruser.ui.other.getEndOfToday
+import com.example.matatumanageruser.ui.other.getFirstDayOfTheMonth
 import com.example.matatumanageruser.utils.DispatcherProvider
 import com.example.matatumanageruser.utils.OperationStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +30,9 @@ class StatViewModel @Inject constructor(val repository: MainRepository,
 
         viewModelScope.launch(dispatcher.io){
             _statsValues.postValue(StatStatus.Loading)
-            when(val response = repository.getStats("",driverId,"a","a")){
+            when(val response = repository.getStats("",driverId,
+                getFirstDayOfTheMonth(), getEndOfToday()
+            )){
                 is OperationStatus.Error -> StatStatus.Failed(response.message!!)
                 is OperationStatus.Success -> {
                     if (response.data!!.isEmpty()){

@@ -15,8 +15,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TripListViewModel @Inject constructor(val repository: MainRepository,
-                                            private val dispatcher: DispatcherProvider
+class TripListViewModel @Inject constructor(
+    val repository: MainRepository,
+    private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
     private var _tripList = MutableLiveData<TripListStatus>(TripListStatus.Empty)
@@ -28,20 +29,20 @@ class TripListViewModel @Inject constructor(val repository: MainRepository,
     val tripObject: LiveData<Trip>
         get() = _tripObject
 
-    fun setTripObject(trip: Trip){
+    fun setTripObject(trip: Trip) {
         _tripObject.value = trip
     }
 
-    fun getTrips(id: String){
+    fun getTrips(id: String) {
 
-        viewModelScope.launch(dispatcher.io){
+        viewModelScope.launch(dispatcher.io) {
             _tripList.postValue(TripListStatus.Loading)
-            when(val response = repository.getTrips("",id,"","")){
+            when (val response = repository.getTrips("", id, "", "")) {
                 is OperationStatus.Error -> _tripList.postValue(TripListStatus.Failed(response.message!!))
                 is OperationStatus.Success -> {
-                    if (response.data!!.isEmpty()){
+                    if (response.data!!.isEmpty()) {
                         _tripList.postValue(TripListStatus.Failed("No data was returned"))
-                    }else{
+                    } else {
                         _tripList.postValue(TripListStatus.Success("success", response.data))
                     }
 
@@ -52,11 +53,10 @@ class TripListViewModel @Inject constructor(val repository: MainRepository,
     }
 
 
-
-    sealed class TripListStatus{
-        class Success(val resultText: String, val trips: List<Trip>): TripListStatus()
-        class Failed(val errorText: String): TripListStatus()
-        object Loading: TripListStatus()
-        object Empty: TripListStatus()
+    sealed class TripListStatus {
+        class Success(val resultText: String, val trips: List<Trip>) : TripListStatus()
+        class Failed(val errorText: String) : TripListStatus()
+        object Loading : TripListStatus()
+        object Empty : TripListStatus()
     }
 }
