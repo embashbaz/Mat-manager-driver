@@ -153,7 +153,7 @@ class ExpenseListFragment : Fragment(), ExpenseDetailDialog.ExpenseDetailDialogL
             when(it){
                 is ExpenseListViewModel.ExpenseStatus.Success-> {
                     showLongToast("Expense Added")
-                    ( activity?.application as MatManagerUserApp).statisticsObject!!.expense =+ expense.amount
+                    ( activity?.application as MatManagerUserApp).statisticsObject!!.expense += expense.amount
                    getExpenses()
                 }
 

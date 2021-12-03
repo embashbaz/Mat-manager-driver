@@ -94,7 +94,7 @@ class TrackingService :  LifecycleService(){
                 }
 
                 Constant.ACTION_PAUSE_SERVICE -> {
-
+                    pauseService()
                 }
 
                 Constant.ACTION_STOP_SERVICE -> {
@@ -130,6 +130,11 @@ class TrackingService :  LifecycleService(){
         } else {
             fusedLocationProviderClient.removeLocationUpdates(locationCallback)
         }
+    }
+
+    private fun pauseService() {
+        isTracking.postValue(false)
+
     }
 
     val locationCallback = object : LocationCallback() {
@@ -214,20 +219,30 @@ class TrackingService :  LifecycleService(){
         if (todayStat != null && currentLocation.value != null){
             todayStat.locationLat = currentLocation.value!!.latitude
             todayStat.locationLng = currentLocation.value!!.longitude
+            todayStat.comment = "active"
             if (pathPoints.value!!.isNotEmpty()) {
                 todayStat.pathPoints = convertToJsonArray(pathPoints.value!!)
+                todayStat.distance = getDistance()
+                updateStatInDb(todayStat)
                 (application as MatManagerUserApp).statisticsObject = todayStat
                 val bus = ( application as MatManagerUserApp).busObject
                 updateBusInDb(bus!!)
 
             }
+
+        }
+
+        if (todayStat == null){
+            //stopService(intent)
         }
 
     }
 
     fun updateStatInDb(stat: Statistics){
         lifecycleScope.launch(dispatcherProvider.io){
-           // repository.updateStat(stat)
+            lifecycleScope.launch(dispatcherProvider.io){
+               repository.updateStat(stat)
+            }
         }
 
     }
@@ -239,4 +254,17 @@ class TrackingService :  LifecycleService(){
             repository.updateBus(bus)
         }
     }
+
+    fun getDistance(): Double{
+
+        var distanceInMeters = 0.0
+        for(polyline in pathPoints.value!!) {
+            distanceInMeters += TrackingUtils.calculatePolylineLength(polyline).toDouble()
+        }
+
+        return distanceInMeters/1000
+
+    }
+
+
 }

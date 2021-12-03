@@ -3,9 +3,6 @@ package com.example.matatumanageruser.ui.stat
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.example.matatumanageruser.data.Statistics
 import com.example.matatumanageruser.databinding.FragmentStatisticsBinding
@@ -19,6 +16,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import androidx.core.content.ContextCompat
 import android.graphics.DashPathEffect
+import android.graphics.Paint
+import android.graphics.pdf.PdfDocument
 import android.widget.AdapterView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.matatumanageruser.MatManagerUserApp
@@ -26,6 +25,15 @@ import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
 import com.example.matatumanageruser.ui.other.showLongToast
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.utils.Utils
+import android.graphics.pdf.PdfDocument.PageInfo
+import android.os.Environment
+import android.view.*
+import androidx.core.view.get
+import com.example.matatumanageruser.R
+import com.example.matatumanageruser.ui.other.getMonth
+import com.example.matatumanageruser.ui.other.getYear
+import java.io.File
+import java.io.FileOutputStream
 
 
 @AndroidEntryPoint
@@ -43,6 +51,7 @@ class StatisticsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
 
         statisticsBinding = FragmentStatisticsBinding.inflate(inflater, container, false)
         val view = statisticsBinding.root
@@ -197,6 +206,60 @@ class StatisticsFragment : Fragment() {
     fun setRecyclerView() {
         statisticsBinding.statisticsRecyclerView.layoutManager = LinearLayoutManager(activity)
         statisticsBinding.statisticsRecyclerView.adapter = defaultRecyclerAdapter
+    }
+
+    fun createDocument(){
+        val document = PdfDocument()
+        val pageInfo = PageInfo.Builder(1250, 2000, 1).create()
+        val page: PdfDocument.Page = document.startPage(pageInfo)
+        val graphData = statisticsBinding.lineChart
+        val canvas = page.canvas
+        val mPaint = Paint()
+
+        graphData.draw(canvas)
+        mPaint.textSize = 35f
+        canvas.drawText("Report for this month for Mat manager", 40F, 900F, mPaint )
+        val dots = "........"
+        mPaint.textSize = 30f
+        mPaint.isFakeBoldText = true
+        canvas.drawText("Day $dots$dots$dots Trips $dots distance(Km) $dots Fare collected $dots Expense", 40F, 950F, mPaint )
+
+        mPaint.textSize = 25f
+        mPaint.isFakeBoldText = false
+        var startY = 980F
+        for(item in allStats){
+            canvas.drawText("${item.dayId} $dots ${item.numberTrip} $dots$dots ${item.distance}  $dots$dots$dots$dots ${item.amount} $dots$dots$dots$dots ${item.expense}", 40F, startY, mPaint )
+            startY+= 30F
+        }
+
+        document.finishPage(page)
+
+       // page.canvas.draw
+        val file = File(Environment.getExternalStorageDirectory(), "/MatManagerFor"+ getMonth()+"-"+ getYear()+".pdf")
+       try {
+           document.writeTo(FileOutputStream(file))
+       }catch (e: Exception){
+           e.printStackTrace()
+       }
+
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        // super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.stat_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.print_pdf_stat){
+           createDocument()
+
+            //  openNoticeDialog("Yes", "Are you sure you want to logout")
+        }
+
+
+
+
+        return super.onOptionsItemSelected(item)
     }
 
 

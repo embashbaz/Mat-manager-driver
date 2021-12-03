@@ -122,6 +122,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         dashboardViewModel.startDayResult.observe(viewLifecycleOwner, {
             when(it){
                 is DashboardViewModel.StartDayStatus.Success -> {
+
                    showLongToast(it.resultText)
                     ( activity?.application as MatManagerUserApp).statisticsObject = it.statistics
                     ( activity?.application as MatManagerUserApp).busObject = it.bus
@@ -134,6 +135,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                 is DashboardViewModel.StartDayStatus.Failed -> {
                     showLongToast(it.errorText)
                     dashboardViewModel.setStartDayEmpty()
+
                 }
 
 
@@ -154,10 +156,10 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         dashboardViewModel.endDayResult.observe(viewLifecycleOwner, {
             when(it){
                 is DashboardViewModel.StartDayStatus.Success -> {
+                    sendCommmandToTrackingService(Constant.ACTION_STOP_SERVICE)
                     showLongToast(it.resultText)
                     ( activity?.application as MatManagerUserApp).statisticsObject = null
                     ( activity?.application as MatManagerUserApp).busObject = null
-                    sendCommmandToTrackingService(Constant.ACTION_STOP_SERVICE)
                     setStat()
                     dashboardViewModel.setEndDayEmpty()
                 }
@@ -165,6 +167,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
                 is DashboardViewModel.StartDayStatus.Failed -> {
                     showLongToast(it.errorText+", please try again")
                     dashboardViewModel.setEndDayEmpty()
+                    sendCommmandToTrackingService(Constant.ACTION_STOP_SERVICE)
                 }
 
 
@@ -281,7 +284,9 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
         dialog.dismiss()
         setStat()
         if(stat!= null){
+            stat!!.comment = "ended"
             dashboardViewModel.endDayRequest(stat!!)
+            sendCommmandToTrackingService(Constant.ACTION_PAUSE_SERVICE)
         }
     }
 
