@@ -34,6 +34,7 @@ class ExpenseDetailDialog (val type: Boolean, var expense: Expense?) : DialogFra
             expenseDetailBiding.saveExpenseBt.setOnClickListener {
                 createExpense()
                 listener.onSaveButtonClicked(expense!!)
+                dialog?.dismiss()
             }
 
             builder.create()

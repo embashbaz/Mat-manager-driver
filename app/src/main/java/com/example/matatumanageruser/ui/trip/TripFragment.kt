@@ -103,6 +103,7 @@ class TripFragment : Fragment(), NoticeDialogFragment.NoticeDialogListener,
             markerOptions.position(loc)
             markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.final_bus))
             markerOptions.rotation(location.bearing)
+            markerOptions.anchor(0.5f, 0.5f)
             locMarker = map?.addMarker(markerOptions)
            // locMarker!!.remove()
        }

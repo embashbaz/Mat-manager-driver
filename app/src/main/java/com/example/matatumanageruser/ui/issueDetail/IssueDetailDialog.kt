@@ -35,6 +35,7 @@ class IssueDetailDialog(val type: Boolean, var issue: Issue?) : DialogFragment()
             issueDetailBinding.saveIssueBt.setOnClickListener {
                 createIssue()
                 listener.onSaveButtonClicked(issue!!)
+                dialog?.dismiss()
 
             }
 

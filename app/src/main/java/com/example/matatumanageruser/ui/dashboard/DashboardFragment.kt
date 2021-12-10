@@ -33,6 +33,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
     private val dashboardViewModel: DashboardViewModel by viewModels()
     private var locationPermissionsGranted = false
     private val driverId : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.driverId }
+    private val adminId  : String by lazy {  ( activity?.application as MatManagerUserApp).driverObject!!.managerId }
     private var stat: Statistics? = null
 
     override fun onCreateView(
@@ -275,7 +276,7 @@ class DashboardFragment : Fragment(), EasyPermissions.PermissionCallbacks, Start
 
     override fun onSaveButtonClicked(plate: String) {
         if (stat == null){
-            dashboardViewModel.startDayRequest(plate, driverId)
+            dashboardViewModel.startDayRequest(plate, driverId, adminId)
         }
     }
 

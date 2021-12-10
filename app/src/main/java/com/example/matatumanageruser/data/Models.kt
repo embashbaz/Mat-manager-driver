@@ -86,6 +86,7 @@ data class Statistics(
     var timeEnded: String = "",
     var maxSpeed: Double = 0.0,
     var numberTrip : Int = 0,
+    var matAdminId: String ="",
     var comment: String = ""
 )
 

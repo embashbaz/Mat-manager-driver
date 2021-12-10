@@ -11,6 +11,7 @@ import com.example.matatumanageruser.data.Issue
 import com.example.matatumanageruser.databinding.FragmentIssueBinding
 import com.example.matatumanageruser.ui.issueDetail.IssueDetailDialog
 import com.example.matatumanageruser.ui.other.DefaultRecyclerAdapter
+import com.example.matatumanageruser.ui.other.showLongToast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -137,11 +138,17 @@ class IssueFragment : Fragment(), IssueDetailDialog.IssueDetailDialogListener {
     override fun onSaveButtonClicked(issue: Issue) {
         issue.driverId = driverId
         issue.comment = adminId
-
+        issueListViewModel.createNewIssue(issue)
 
         issueListViewModel.addIssueResult.observe(viewLifecycleOwner, {
             when(it){
                 is IssuesViewModel.IssueStatus.Success -> {
+                    showLongToast("Issue added")
+                    getIssues()
+                }
+
+                is IssuesViewModel.IssueStatus.Failed ->{
+                    showLongToast(it.errorText)
 
                 }
             }

@@ -85,7 +85,7 @@ constructor(private var repository: MainRepository,
         _logOutStatus.value = StartDayStatus.Empty
     }
 
-    fun startDayRequest(plate: String, driverId: String) {
+    fun startDayRequest(plate: String, driverId: String, adminId: String) {
 
         viewModelScope.launch(dispatcher.io) {
             _startDayResult.postValue(StartDayStatus.Loading)
@@ -101,7 +101,7 @@ constructor(private var repository: MainRepository,
                     if (busResponse.data!!.status.lowercase() == "in service") {
                         _startDayResult.postValue(StartDayStatus.Failed("Bus already in service"))
                     } else {
-                        startDay(plate,driverId, busResponse.data!!)
+                        startDay(plate,driverId,adminId, busResponse.data!!)
                     }
                 }
             }
@@ -110,8 +110,8 @@ constructor(private var repository: MainRepository,
 
     }
 
-    suspend fun startDay(plate: String, driverId: String, bus: Bus){
-        val stat = Statistics(dayId = getDate(), busPlate = plate, driverId = driverId, "this",timeEnded = "a",comment = "this")
+    suspend fun startDay(plate: String, driverId: String, adminId: String, bus: Bus){
+        val stat = Statistics(dayId = getDate(), busPlate = plate, driverId = driverId, "this",timeEnded = "a",comment = "this", matAdminId = adminId)
         when(val response = repository.addStat(stat)){
             is OperationStatus.Error -> _startDayResult.postValue(StartDayStatus.Failed(response.message!!))
             is OperationStatus.Success -> {
